@@ -1,0 +1,568 @@
+
+<!-- saved from url=(0034)http://ericbeaudry.ca/INF3105/tp1/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <title>INF3105 / TP1</title>
+<style type="text/css">
+pre {
+    padding: 5px;
+    background-color: #eeffcc;
+    color: #333333;
+    line-height: 120%;
+    border: 1px solid #aacc99;
+    border-left: 1px solid #aacc99;
+    border-right: 1px solid #aacc99;
+}
+
+.nouveau{
+background-color: rgb(153,255, 153);
+}
+
+</style>
+<style type="text/css"></style></head>
+
+<body>
+<p>
+<b>INF3105 - Structure de données et algorithmes
+(Version préliminaire)
+<br>
+Automne 2014
+</b>
+</p>
+
+<h1 align="center">Travail pratique #1 : Maximisation de la superficie d'un empire</h1>
+<hr>
+
+<h2>1. Objectifs</h2>
+<ul>
+ <li>S'initier à la programmation en C++.</li>
+ <li>Pratiquer l'encapsulation et concevoir des types abstraits de données.
+ </li><li>Gérer la mémoire.</li>
+ <li>Implémenter et appliquer des structures de données simples en C++.</li>
+ <li>Résoudre un problème simple.</li>
+ <li>Analyser la complexité temporelle d'un algorithme.</li>
+</ul>
+
+<h2>2. Problématique</h2>
+<p>
+Un empreur vous mandate pour écrire un programme qui détermine les régions à conquérir pour maximiser la superficie totale de son empire.
+L'empreur vous donne quelques contraintes à respecter :
+</p><ol>
+ <li>l'empire est composée d'au plus <tt>nbRegion</tt> régions;</li>
+ <li>toutes les régions doivent être <b>accessibles</b> entre elles, que ce soit directement ou indirectement;</li>
+ <li>deux régions A et B sont directement accessibles si la distance la plus courte entre A et B est d'au plus <tt>DM</tt>, c'est-à-dire <tt>distanceMin(A,B)&lt;=DM</tt>;</li>
+ <li>deux régions A et B sont indirectement accessibles, si A et B ne sont pas directement accessibles, 
+     mais qu'il existe au moins une région C tel que les paires de régions (A,C) et (B,C) sont accessibles.</li>
+</ol>
+<p></p>
+
+<h2>3. Structure du programme</h2>
+<p>
+Un squelette de départ est disponible dans <a href="http://ericbeaudry.ca/INF3105/tp1/tp1.zip">tp1.zip</a>.
+</p>
+<ul>
+  <li>Ce squelette vous est fourni pour vous aider à vous concentrer sur l'essentiel du TP1.</li>
+  <li>Vous êtes libres de l'utiliser ou non.</li>
+  <li>Vous pouvez y effectuer toutes les modifications que vous souhaitez ou jugez nécessaires.</li>
+  <li>Ce squelette vise d'abord la simplicité pour obtenir rapidement un programme fonctionnel.</li>
+</ul>
+<p>
+</p>
+
+<h3>3.1 Syntaxe d'appel du programme tp1</h3>
+<p>
+Votre programme doit pouvoir être lancé en ligne de commande avec la syntaxe suivante :
+</p>
+<blockquote>
+<pre>./tp1 carte.txt nbRegions [DM]</pre>
+</blockquote>
+<p>
+où :
+</p>
+<ul>
+<li><tt>carte.txt</tt> est le nom du fichier de carte à lire;</li>
+<li><tt>nbRegions</tt> est le nombre de régions sélectionner;</li>
+<li><tt>DM</tt> est la distance maximale entre 2 régions.</li>
+</ul>
+
+<p>
+Le paramètre <tt>DM</tt> est optionel.
+Lorsque non spécifié, le paramètre <tt>DM</tt> prend pour valeur <tt>+∞</tt>.
+Le paramètre <tt>DM</tt> est inutile, donc non considiré, lorsque <tt>nbRegions=1</tt>.
+</p>
+
+<h3>3.2 Entrée : format d'un fichier carte</h3>
+<p>
+Une carte est spécifiée par une liste de régions.
+Une région est spécifiée par un nom, suivi d'un deux-point (<tt>:</tt>) et d'un polygone.
+Un polygone est une liste d'au moins 3 points (coordonnées sur un plan) séparés par des virgules (<tt>,</tt>) et terminée par un point virgule (<tt>;</tt>).
+
+</p><p>
+Voici un exemple d'entrée (carte00.txt).
+</p><blockquote>
+<pre>A : (0,0), (5,10), (10,0) ;
+B : (20,0), (20,10), (30,10), (30,00) ;
+C : (50,0), (50,10), (55,15), (60,10), (60,0) ;
+</pre>
+</blockquote>
+Cette exemple correspond visuellement à la carte suivante.
+<p></p>
+
+<img src="./INF3105   TP1_files/carte00.png">
+
+<p>
+Les régions A, B et C ont respectivement une superficie (aire) de 50, 100, 125 unitées carrées.
+La distance minimale entre (A,B) est de 10 unités.
+La distance minimale entre (A,C) est de 40 unités.
+La distance minimale entre (B,C) est de 20 unités.
+</p>
+
+<h3>3.3 Sortie</h3>
+<p>
+Les résultats produits par votre programme doivent être écrits dans la sortie standard (<i>stdout</i>) à l'aide du flux de sortie C++ <tt>std::cout</tt>.
+Sur la première ligne, votre programme doit afficher la superficie totale.
+Sur la ou les ligne(s) suivante(s), votre programme doit afficher le(s) nom(s) des régions choisies, à raison d'un nom par ligne.
+</p>
+<p>
+Voici quelques exemples de sortie :
+</p>
+
+<blockquote>
+<pre><u><b>./tp1 carte00.txt 1 0</b></u>
+125
+C
+<u><b>./tp1 carte00.txt 2 10</b></u>
+150
+A
+B
+<u><b>./tp1 carte00.txt 2 15</b></u>
+150
+A
+B
+<u><b>./tp1 carte00.txt 2 20</b></u>
+225
+B
+C
+<u><b>./tp1 carte00.txt 3 20</b></u>
+275
+A
+B
+C
+<u><b>./tp1 carte00.txt 3 1</b></u>
+125
+C
+</pre>
+</blockquote>
+
+<h3>3.4 Algorithme générale</h3>
+<h4>3.4.1 Cas avec <tt>nbRegions=1</tt></h4>
+<p>
+Ce cas est trivial.
+</p>
+
+<h4>3.4.2 Cas avec <tt>nbRegions=2</tt></h4>
+<p>
+Pour résoudre ce cas, il faut imbriquer deux boucles <tt>for</tt>, chacune choisissant une région.
+L'algorithme de base peut ressembler à ceci.
+</p>
+<pre>ae ← 0; // aire de l'empire
+Pour r1 = 0 .. regions.taille() - 1
+|   Pour r2 = 0 .. regions.taille() -1
+|   |   si distance(regions[r1], regions[r2]) &lt; DM alors :
+|   |   |   si(aire(regions[r1]) + aire(regions[r2]) &gt; ae) alors :
+|   |   |   |  ae ← aire(regions[r1]) + aire(regions[r2])
+|   |   |   |  choix ← r1 "\n" r2
+Afficher ae "\n"
+Afficher choix
+</pre>
+<p>
+Cet algorithme fonctionne dans la plupart des cas, mais doit être adapté à certains cas limites.
+Son efficacité peut également être améliorée.
+</p>
+
+<h3>3.5 Algorithmes géométriques</h3>
+<p>
+Le cours INF3105 n'est ni un cours de mathématiques ni un cours de géométrie.
+Votre tâche est de créer des types abstraits de données (ex.: Point, Polygone, Vecteur, etc.) pour implémenter des structures géométriques ainsi que des algorithmes et des équations les exploitant.
+Vous devez implémenter le tout en respectant autant que possible les principes d'encapsulation et d'abstraction.
+Par exemple, un objet <tt>Polygone</tt> est composé d'objets <tt>Point</tt>.
+Toutefois, la classe <tt>Polygone</tt> devrait faire abstraction de comment est représenté un <tt>Point</tt>.
+Autrement dit, la classe Polygone ne doit pas savoir qu'un point est composé de coordonnées <tt>(x,y)</tt>.
+</p>
+<h4>3.5.1 Calcul de l'aire d'un polygone</h4>
+<p>
+Vous trouverez au lien suivant un <a href="http://www.mathopenref.com/coordpolygonarea2.html">algorithme calculant l'aire d'un polygone et des explications sur ce dernier</a>.
+N'oubliez pas d'ajouter la fonction valeur absolue <tt><a href="http://en.cppreference.com/w/cpp/numeric/math/fabs">fabs</a></tt> à la fin de votre implémentation,
+car l'aire ne devrait jamais être négative.
+</p>
+
+<h4>3.5.2 Calcul de la distance minimale entre deux polygones</h4>
+<p>
+Soit deux polygones A=&lt;a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>n</sub> &gt; 
+et B = &lt;b<sub>1</sub>, b<sub>2</sub>, ..., b<sub>m</sub> &gt;.
+</p>
+<object alt="2polygones.svg" data="http://ericbeaudry.ca/INF3105/tp1/2polygones.svg" type="image/svg+xml">Figure SVG ici.</object>
+<p>
+La distance entre ces deux polygone peut se calculer à l'aide de l'algorithme suivant.
+</p><pre>Pour i = 0 .. n-1
+    c<sub>a</sub> ← creer segment de droite pour le côté (a<sub>i</sub>, a<sub>(i+1)modulo n</sub>) de A
+    Pour j = 0 .. m-1
+        c<sub>b</sub> ← creer segment de droite pour le côté (b<sub>i</sub>, b<sub>(i+1)modulo m</sub>) de B
+        d ← calculer distance minimale entre c<sub>a</sub> et c<sub>b</sub>
+</pre>
+<p></p>
+
+<h4>3.5.3 Calcul de la distance minimale entre deux segments de droite</h4>
+<p>
+La distance minimale entre deux segments de droite AB et CD est atteinte à au moins l'une des extrémités de l'un des deux segments.
+Dans le cas ci-dessous, la distance minimale atteint au moins l'un des points A, B, C ou D.
+Ainsi, il suffit de calculer les 4 distances (A, CD), (B, CD), (C, AB) et (D, AB) et de retenir la plus courte.
+</p>
+<object alt="2segments.svg" data="http://ericbeaudry.ca/INF3105/tp1/2segments.svg" type="image/svg+xml">Figure SVG ici.</object>
+
+<h4>3.5.4 Calcul de la distance minimale entre un point segments de droite</h4>
+<p>
+Le calcul de la distance minimale entre un point et un segment de droite est similaire au calcul de la distance minimale entre un point et une droite.
+Considérons deux exemples : distance(A, CD) et distance(B, CD).
+</p>
+<object alt="projections.svg" data="http://ericbeaudry.ca/INF3105/tp1/projections.svg" type="image/svg+xml">Figure SVG ici.</object>
+
+
+
+<p>
+Pour calculer la distance (A, CD), il suffit de calculer la projection orthogonale (le vecteur u<sub>v</sub>) du vecteur u sur v, où u=CA et v=CD.
+La projection est calculée par :
+</p><blockquote>
+<p>
+u<sub>v</sub> = (u·v)/(v·v) &nbsp; v
+</p>
+<p>
+où u·v est le produit scalaire (<i>dot product</i>), u·v= x<sub>u</sub>x<sub>v</sub> + y<sub>u</sub>u<sub>v</sub>.
+</p>
+</blockquote>
+<p></p>
+
+<p>
+Le point le plus proche entre le point A et le segment de droite CD est le même que sur la droite prolongeant CD.
+Ce point est obtenu par :
+A<sub>CD</sub> = C + u<sub>v</sub>.
+Pour calculer la distance, il suffit de calculer la distance (A, A<sub>CD</sub>) ou de calculer la norme du vecteur CA - u<sub>v</sub>.
+</p>
+<p>
+Dans le cas de B et CD, la distance minimale n'est pas la même que la distance entre B et la droite prolongeant CD.
+Pour obtenir la bonne distance sur le segment de droite, il suffit de borner le ratio (u·v)/(v·v) dans l'intervalle [0,1].
+Ainsi, on trouve que le point le plus proche entre le point B et le segment CD est le point D.
+</p>
+<a href="http://ericbeaudry.ca/INF3105/tp1/algo_distance_min.pdf">Des notes manuscrites numérisées sont disponibles dans un PDF ici.</a>
+
+
+<h2>4. Contraintes</h2>
+<h3>4.1 Librairies permises</h3>
+<p>Vous devez implémenter et utiliser vos propres structures de données.
+Pour l'instant, l'utilisation des conteneurs de la librairie standard de C++ (<i>Standard Template Library</i>) n'est pas permise.
+Ce sera permis plus tard dans le cours.
+</p>
+
+<h3>4.2 Environnement de développement</h3>
+<p>
+Relisez les <a href="http://ericbeaudry.ca/INF3105/politiques.html">Politiques et les directives sur les outils informatiques dans le cours INF3105</a>.
+Votre TP1 doit pouvoir être compilé avec g++ version 4.8.
+</p>
+
+<h3>4.3 Taille des équipes</h3>
+<p>
+Vous pouvez faire ce travail en équipe de 1 ou 2.
+Toutefois, tous les membres de l'équipe doivent contribuer à l'ensemble du travail et non à seulement quelques parties.
+Le travail d'équipe vise à favoriser les discussions et l'entraide.
+Le travail d'équipe ne vise pas à réduire la tâche.
+Ainsi, se diviser la tâche en deux n'est pas une méthode de travail d'équipe appropriée dans ce cours.
+La participation inadéquate des membres de l'équipe peut être considérée comme du plagiat.
+Le professeur et le correcteur pourront sélectionner quelques équipes au hasard afin de vérifier que tous les membres sont capables d'expliquer l'ensemble du travail.
+</p>
+
+<h2>5. Tests et Interface graphique</h2>
+<p>
+Des tests seront disponibles dans <a href="http://ericbeaudry.ca/INF3105/tp1/tp1-tests.zip">tp1-tests.zip</a>.
+</p>
+<!--
+<p>
+À titre indicatif, vous <b>pourrez</b> consulter un <a href="rapport.html">rapport montrant des temps d'exécution d'une solution simple</a>.
+</p>
+-->
+
+
+<h2>6. Remise</h2>
+Vous devez remettre le TP1 <b>au plus tard le 30 septembre 2014 à 22h00</b>.
+
+<h3>6.1 Remise papier</h3>
+La partie papier est constituée du/d'un(e)/de:
+<ol>
+<li><b>Formulaire de remise imprimé</b> 
+[ <a href="http://ericbeaudry.ca/INF3105/tp1/tp1-formulaire.pdf">PDF</a> | <a href="http://ericbeaudry.ca/INF3105/tp1/tp1-formulaire.odt">OpenDocument</a> ],
+<b>dûment rempli et signé.</b>
+</li>
+<li>
+<b>Autoévaluation</b> indiquant si votre programme fonctionne correctement, partiellement ou aucunement.
+</li>
+<li><b>Un tableau montrant les temps d'exécution sur les fichiers tests fournis.</b>
+<ul>
+  <li>Si un test prend plus de 60 secondes, vous pouvez l'arrêter (<tt>[Ctrl]+[C]</tt>) et simplement écrire <b>&gt;60</b> dans votre rapport.
+  </li>
+  <li>Vous <b>pourrez</b> générer un rapport automatiquement en lançant la commande <tt>/home/inf3105/tp1/evaluer-unix.sh</tt>
+      sur <tt>{malt,rayon[12]}.labunix.uqam.ca</tt> à partir du répertoire où vous avez compilé votre exécutable <tt>tp1</tt>.
+</li></ul>
+</li>
+<li><b>Analyse de la complexité temporelle en notation grand O</b>
+      <ul>
+         <li>de la fonction calculant l'aire d'un polygone;</li>
+         <li>de la fonction calculant la distance minimale entre deux polygones;</li>
+         <li>de votre programme principal (fonction <tt>main</tt>).</li>
+      </ul>
+  Les complexités temporelles devraient être exprimées en fonction de : 
+  <ul>
+   <li><i>p</i> indique nombre points par polygone (d'une région);</li>
+   <li><i>r</i> indique nombre de régions (polygones);</li>
+   <li><i>n</i> indique nombre de régions à sélectionner.</li>
+  </ul>
+  </li>
+
+
+
+<li><b>Code source.</b>
+<ul>
+ <li>Imprimez tout votre code source.</li>
+ <li>L'impression doit être fait à l'aide d'un éditeur de texte mettant la syntaxe C++ en évidence,
+     comme <a href="http://projects.gnome.org/gedit/">GEdit</a> ou <a href="http://notepad-plus-plus.org/">Notepad++</a>.</li>
+ <li>N'imprimez pas depuis un logiciel de traitement de texte comme Word.</li>
+ <li>Pour réduire la consommation de papier, SVP, imprimez dans un format 2 pages par côté de feuille et en recto-verso (4 pages par feuille).</li>
+ <li>Le code source doit être présenté dans un ordre convenable.
+     Par exemple, point.h devrait venir immédiatement avant point.cpp.
+ </li>
+
+</ul></li></ol>
+
+<p>
+Vous pouvez remettre la partie papier sur des feuilles <b>brochées</b> (évitez les trombones et les enveloppes) au début d'un cours.
+</p>
+<p>
+Vous pouvez aussi remettre la partie papier dans la chute à travaux tout juste à côté du PK-4151.
+</p>
+
+<p>
+Les correcteurs vous feront des commentaires constructifs directement sur la partie papier qui vous sera ensuite retournée.
+</p>
+
+<h3>6.2 Remise électronique</h3>
+<p>
+Vous devez remettre tous vos fichiers sources, incluant un fichier Makefile, via <a href="http://oto.uqam.ca/">le système Oto</a>.
+</p>
+<p>
+Avant de soumettre votre travail, il est fortement conseillé de le vérifier.
+Exemple :
+</p><blockquote><pre>oto verifier_tp beaudry_er INF3105-TP1 Makefile *.h* *.c*
+</pre></blockquote>
+<p></p>
+
+<p>
+Exemple de commande pour remettre votre TP1:
+</p><blockquote><pre>oto rendre_tp beaudry_er INF3105-TP1 CODE00000001,CODE00000002 Makefile *.h* *.c*
+</pre></blockquote>
+<p></p>
+
+<p>
+Exemple de commande pour obtenir une confirmation de remise:
+</p><blockquote><pre>oto confirmer_remise beaudry_er INF3105-TP1 CODE00000001,CODE00000002
+</pre></blockquote>
+
+<p>
+Vous pouvez aussi utiliser l'<a href="http://oto.uqam.ca/">application Web d'Oto</a>.
+À noter que la vérification peut ne pas fonctionner correctement via l'application Web.
+</p>
+<p>
+Vous pouvez soumettre votre TP autant de fois que vous voulez.
+Seule la dernière soumission sera considérée.
+</p>
+
+
+<h2>7. Évaluation</h2>
+<p>
+Ce travail pratique vaut 15% de la note finale.
+</p>
+
+
+<h3>7.1 Grille de correction</h3>
+<table border="1" cellpadding="2" cellspacing="1">
+ <tbody><tr bgcolor="#aaaaff" valign="top">
+  <td><b>Critère</b></td>
+  <td><b>Description</b></td>
+  <td><b>Pondération</b></td>
+ </tr>
+ <tr valign="top">
+  <td>A.</td>
+  <td><b>Respect des directives pour la remise</b>
+   <ul>
+      <li>Fichiers sources seulement (ex.: .h, .cpp, Makefile). 
+          Aucun fichier source manquant.
+          Aucun fichier binaire (ex.: .o, .obj, .gch, exécutable, etc.).
+          Aucun fichier test.</li>
+      <li>Remise par Oto.
+          Pas de remise par courriel.</li>
+      <li>Compilable avec <tt>make</tt> sans modifications.</li>
+      <li>Exécutable sans modification.</li>
+    </ul>
+  </td>
+  <td align="center">/ 2</td>
+ </tr> 
+ <tr valign="top">
+  <td>B.</td>
+  <td><b>Appréciation générale</b>
+   <ul>
+      <li>Structure du programme + Qualité du code :</li>
+      <ul>
+        <li>Découpage du programme (tout n'est pas dans la fonction <tt>main()</tt>).</li>
+        <li>Choix des types de données; identificateurs (noms) significatifs, lisibilité du code, pertinence des commentaires; etc.</li>
+        <li>Justesse de l'usage du mot clé <tt>const</tt>, des références (&amp;) et des pointeurs (*).</li>
+      </ul>
+      <li>Encapsulation : <br>
+      </li>
+      <ul>
+        <li>Respect des principes de l'abstraction;
+        </li><li>Cachez le maximum de la représentation des objets en rendant un maximum d'attributs privés;</li>
+        <li>Évitez autant que possible les bris d'abstraction, comme des <i>getters</i>
+          et <i>setters</i> qui retournent ou affectent directement des attributs d'un type abstrait de donnée.
+          Par exemple, les fonctions <tt>getX()</tt> et <tt>getY()</tt> ne devraient pas exister dans une classe <tt>Point</tt>.
+          Mais, une fonction <tt>getNom()</tt>dans une classe <tt>Region</tt> peut être justifiée/tolérée.
+        </li>
+        <li>Utilisation appropriée des modificateurs d'accès <tt>public</tt>, <tt>protected</tt> et <tt>private</tt>,
+          et du mot clé <tt>friend</tt>, etc.</li>
+      </ul>
+      <li>Gestion de la mémoire : <br>
+      </li>
+      <ul>
+        <li>Toute la mémoire allouée dynamiquement doit être correctement libérée au moment approprié et avant la fin du programme.</li>
+      </ul>
+    </ul>  
+  </td>
+  <td align="center">/ 3</td>
+ </tr> 
+ <tr valign="top">
+  <td>C.</td>
+  <td><b>Fonctionnement correct.</b><br>
+  Le programme sélectionne les régions permettant de maximiser la superficie de l'empire.
+  Une sélection non optimale est considérée mauvaise même si elle est très proche d'une sélection optimale.
+  <br>
+  L'efficacité n'est pas directement évaluée.
+  Cependant, l'efficacité peut être indirectement évaluée lorsqu'un programme ne parvient pas à produire des résultats dans des délais raisonnables.
+  Votre programme doit également consommer une quantité de mémoire raisonnable.
+  <br>
+  Catégories de tests :
+  <ul>
+    <li>C1 : tests nbRegions=1  (2 points)</li>
+    <li>C2 : tests nbRegions=2, DM=+∞ (2 points)</li>
+    <li>C3 : tests nbRegions=2, DM &lt; +∞ (2 points)</li>
+    <li>C4 : tests nbRegions=2, DM &lt;+∞, mais solution avec une seule région (1 point)</li>
+  </ul>
+  </td>
+  <td align="center">/ 7</td>
+ </tr>
+ <tr valign="top">
+  <td>D.</td>
+  <td><b>Exactitude de l'autoévaluation.</b><br>
+  
+  <table border="1">
+  <tbody>
+  <tr><td rowspan="2"></td>
+      <td colspan="4" align="center">Vous déclarer que votre programme fonctionne</td>
+  </tr>
+  <tr align="center">
+      <td>Correctement</td>
+      <td>Partiellement</td>
+      <td>Aucunement</td>
+      <td>(Déclaration absente)</td>
+  </tr>
+  <tr align="center">
+      <td>À la correction, votre programme fonctionne correctement (C=7)</td>
+      <td>1</td>
+      <td>0.5</td>
+      <td>0</td>
+      <td>0</td>
+  </tr>
+  <tr align="center">
+      <td>À la correction, votre programme fonctionne partiellement (0&lt;C&lt;7)</td>
+      <td>0.5</td>
+      <td>1</td>
+      <td>0.5</td>
+      <td>0</td>
+  </tr>
+  <tr align="center">
+      <td>À la correction, votre programme ne fonctionne aucunement (C=0)</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+  </tr>
+  </tbody></table>
+  <p>Attention : les tests fournis ne sont pas nécessairement ceux qui seront utilisés pour la correction.
+     De nouveaux tests pourront être utilisés.
+  </p></td>
+  <td align="center">/ 1</td>
+ </tr>
+ <tr valign="top">
+  <td>E.</td>
+  <td><b>Analyse des algorithmes.</b>
+   <ul>
+      <li>Complexité temporelle en notation grand O.</li>
+      <li>Ordre de grandeur simplifié. Ex: O(2n) ==&gt; O(n).</li>
+      <li>Justification claire et correcte.</li>
+    </ul>
+  </td>
+  <td align="center">/ 2</td>
+ </tr>
+
+
+ <tr bgcolor="#eeffcc" valign="top">
+  <td><p></p></td>
+  <td align="right">Total : </td>
+  <td align="center">/ 15</td>
+ </tr>
+
+ <tr valign="top">
+  <td>F.</td>
+  <td><b>Fonctionnement avec nbRegions&gt;2 et efficacité (boni).</b>
+  <p>
+  Votre programme est capable de résoudre des tests avec nbRegions&gt;2.
+  L'efficacité est considérée, car les tests seront exécutés avec une limite de temps de CPU.
+  </p>
+  <p>
+  Avertissements :
+   </p><ol>
+    <li>Implémenter cette capacité peut demander beaucoup de temps pour seulement 2 points bonis.</li>
+    <li>Il existe souvent un compromis entre l'efficacité d'un logiciel et ses autres qualités, 
+        comme le fonctionnement correct, la robustesse, la lisibilité du code, la maintenabilité, etc.
+        Vous devez donc être prudents.
+        Évitez les sacrifices déraisonnables qui pourraient vous pénaliser aux autres critères d'évaluation.
+    </li>
+   <ol>
+  <p></p>
+  </ol></ol></td>
+  <td align="center">+ 2</td>
+ </tr> 
+ <tr bgcolor="#eeffcc" valign="top">
+  <td></td>
+  <td align="right">Note maximale : </td>
+  <td align="center">17 / 15</td>
+ </tr>
+</tbody></table>
+
+<p>
+Pour les cas problématiques,
+jusqu'à 2 points peuvent être retranchés pour la qualité de la langue et de la présentation.
+</p>
+
+<hr size="2" width="100%">
+<div align="center">/* Fin de l'énoncé. */<br>
+© Éric Beaudry 2014. Tous droits réservés.
+</div>
+
+
+</body></html>

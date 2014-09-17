@@ -1,0 +1,19 @@
+0. distmin = infini
+1. pour tout segment de A
+	1.2. pour tout segment de B
+	1.2.1 distminAB = segmentA.distmin(segmentB);
+	1.2.2 distmin = minimum(distminAB, distmin);
+2. return distmin
+
+amelioration : 	si distmin < continue
+				sinon arrete boucle B
+				si distmin < continue
+				sinon arrete boucle A
+verifier si toujour valide. 
+- pas toujours vrai : voir dessin les partie concaves
+
+amelioration : si un polygone a plusieurs cote ne garder que ceux important :
+ si section concave le minimum du segment est le point exterieur
+ - pas toujours vrai : voir dessin A et B
+ 
+ amelioration : algo different si concave
