@@ -29,11 +29,16 @@ class Polygone {
 
 	}
 	Polygone() :points(0), aire_(0),sommets(0) {}
+
+	// destructeur
+	~Polygone(){
+		delete[] points;
+	}
     
 	const inline std::string getNom()const { return nom; };
     // calcule  l<aire a la creation
 
-  // destructeur
+
 
   private:
     // Représentation : à compléter.
