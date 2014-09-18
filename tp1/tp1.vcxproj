@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="point.cpp" />
     <ClCompile Include="polygone.cpp" />
+    <ClCompile Include="tp1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="point.h" />

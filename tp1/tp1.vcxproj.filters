@@ -21,6 +21,9 @@
     <ClCompile Include="polygone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tp1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="point.h">
