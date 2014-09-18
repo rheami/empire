@@ -2,3 +2,12 @@
 *.exe
 *.db
 *.zip
+*.sdf
+*.suo
+*.sln
+x64/
+Debug/
+Labo2/
+release/
+UQAM 3105/
+UQAM 3105.opensdf
