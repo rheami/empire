@@ -20,20 +20,12 @@ class Polygone {
     double distance(const Polygone& poly2) const;
     double aire() const; // getter sur la propriete aire_
 
-  // constructeur
-	Polygone(const Point* points[]) :points(0)
-	{
-	// ajoute les points
-
-
-
-	}
-	Polygone() :points(0), aire_(0),sommets(0) {}
+	// constructeurs
+	Polygone(const Point* _points[]);
+	Polygone();
 
 	// destructeur
-	~Polygone(){
-		delete[] points;
-	}
+	~Polygone();
     
 	const inline std::string getNom()const { return nom; };
     // calcule  l<aire a la creation
@@ -43,10 +35,10 @@ class Polygone {
   private:
     // Représentation : à compléter.
     int sommets; // nombre de sommets (ou de cotes)
-    Point* points;
+    Tableau<Point> points;
     double aire_;
 
-    std::string nom;
+    string nom;
 
   friend std::ostream& operator << (std::ostream&, const Polygone&);
   friend std::istream& operator >> (std::istream&, Polygone&);

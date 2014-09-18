@@ -15,7 +15,8 @@
 using namespace std;
 
 int main(int argc, const char** argv){
-    if(argc<3){
+    
+	if(argc<3){
         cout << "./tp1 carte.txt nbRegions [distMax]" << endl;
         return 1;
     }

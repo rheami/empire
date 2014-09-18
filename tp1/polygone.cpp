@@ -8,6 +8,21 @@
 #include <limits>
 #include "polygone.h"
 
+// constructeur
+Polygone::Polygone(const Point* _points[])
+{
+}
+Polygone::Polygone()
+{
+}
+
+
+// destructeur
+Polygone::~Polygone() {
+	
+}
+
+
 double Polygone::distance(const Polygone& poly2) const
 {
     return 0;
@@ -19,7 +34,17 @@ double Polygone::aire() const{
 
 std::ostream& operator << (std::ostream& os, const Polygone& polygone){
     // À compléter.
-    os << "A : (0,0), (0,1), (1,1) ;";
+	char deuxpoints = ':';
+	os << polygone.nom << deuxpoints;
+
+
+	for (int i = 0; i < polygone.points.taille(); ++i)
+	{
+		os << polygone.points[i];
+	}
+
+	
+
     return os;
 }
 
@@ -27,8 +52,8 @@ std::istream& operator >> (std::istream& in, Polygone& polygone){
     // À compléter­.
     char c;
     do{
-        Point p;
-        in >> p >> c >> std::ws;
+		polygone.points.ajouter(Point()); // preparer l<espace pour le point dans le tableau
+		in >> polygone.points[polygone.points.taille()-1] >> c >> std::ws;
     }while(c==',');
     assert(c==';');
     return in;
