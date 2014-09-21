@@ -50,6 +50,12 @@ std::ostream& operator << (std::ostream& os, const Polygone& polygone){
 
 std::istream& operator >> (std::istream& in, Polygone& polygone){
     // À compléter­.
+
+	string nom;
+
+	char deuxpoints;
+	in >> nom >> deuxpoints;
+
     char c;
     do{
 		polygone.points.ajouter(Point()); // preparer l<espace pour le point dans le tableau
@@ -58,13 +64,13 @@ std::istream& operator >> (std::istream& in, Polygone& polygone){
     assert(c==';');
 	int  area = 0;
 	int j = polygone.points.taille() - 1;
-	for (int i = 0; i<polygone.points.taille(); i++)
+	for (int i = 0; i<polygone.points.taille(); ++i)
 	{
 		area = area + (polygone.points[j].X() + polygone.points[i].X()) * (polygone.points[j].Y() - polygone.points[i].Y());
 		j = i;  //j is previous vertex to i
 	}
 	polygone.aire_ = area/2;
-
+	polygone.nom = nom;
     return in;
 }
 

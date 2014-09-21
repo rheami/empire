@@ -14,6 +14,29 @@
 
 using namespace std;
 
+
+void MethodeUnPolygone(Tableau<Polygone*> &Carte)
+{
+
+
+	Polygone* Plusgrand;
+
+	int aire = 0;
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		if (aire < Carte[i]->aire())
+		{
+			aire = Carte[i]->aire();
+			Plusgrand = Carte[i];
+		}
+	}
+	cout << round(Plusgrand->aire()) << endl;
+	cout << Plusgrand->getNom() << endl;
+
+}
+
+
+
 int main(int argc, const char** argv){
     
 	if(argc<3){
@@ -33,10 +56,8 @@ int main(int argc, const char** argv){
     }
 	Tableau<Polygone*> Carte;
     while(!in.eof()){
-        string nom;
         Polygone *polygone = new Polygone;
-        char deuxpoints;
-        in >> nom >> deuxpoints >> *polygone >> std::ws;
+        in >>  *polygone >> std::ws;
         assert(deuxpoints==':');
 		Carte.ajouter(polygone);
     }
@@ -44,8 +65,7 @@ int main(int argc, const char** argv){
     switch(nbRegions){
         case 1:
         {
-            cout << round(Carte[0]->aire()) << endl;
-			cout << Carte[0]->getNom() << endl;
+			MethodeUnPolygone(Carte);
             break;
         }
         case 2:
@@ -60,5 +80,10 @@ int main(int argc, const char** argv){
             break;
     }
 
+	// Netoyage de la memoire
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		delete Carte[i];
+	}
     return 0;
 }

@@ -16,7 +16,8 @@ class Point {
 	Point(const Point& point);
 
 	double distance(const Point& point) const;
-
+	const double X() { return x; };
+	const double Y() { return y; };
   private:
     double x;
     double y;
