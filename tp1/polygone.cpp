@@ -56,6 +56,15 @@ std::istream& operator >> (std::istream& in, Polygone& polygone){
 		in >> polygone.points[polygone.points.taille()-1] >> c >> std::ws;
     }while(c==',');
     assert(c==';');
+	int  area = 0;
+	int j = polygone.points.taille() - 1;
+	for (int i = 0; i<polygone.points.taille(); i++)
+	{
+		area = area + (polygone.points[j].X() + polygone.points[i].X()) * (polygone.points[j].Y() - polygone.points[i].Y());
+		j = i;  //j is previous vertex to i
+	}
+	polygone.aire_ = area/2;
+
     return in;
 }
 
