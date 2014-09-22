@@ -36,6 +36,25 @@ void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 }
 
 
+void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
+{
+
+
+	Polygone* Plusgrand;
+
+	int aire = 0;
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		if (aire < Carte[i]->aire())
+		{
+			aire = Carte[i]->aire();
+			Plusgrand = Carte[i];
+		}
+	}
+	cout << round(Plusgrand->aire()) << endl;
+	cout << Plusgrand->getNom() << endl;
+
+}
 
 int main(int argc, const char** argv){
     
@@ -70,6 +89,8 @@ int main(int argc, const char** argv){
         }
         case 2:
         {
+
+			MethodeDeuxPolygone(Carte);
             cout << round(0) << endl;
             cout << "A" << endl;
             cout << "B" << endl;

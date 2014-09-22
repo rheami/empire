@@ -13,7 +13,7 @@ Point::Point(const Point& point)
 {
 }
 
-Point::Point(double _x, double _y)
+Point::Point(const double _x, const double _y)
   : x(_x), y(_y)
 {}
 

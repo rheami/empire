@@ -79,11 +79,13 @@
   <ItemGroup>
     <ClCompile Include="point.cpp" />
     <ClCompile Include="polygone.cpp" />
+    <ClCompile Include="Segment.cpp" />
     <ClCompile Include="tp1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="point.h" />
     <ClInclude Include="polygone.h" />
+    <ClInclude Include="Segment.h" />
     <ClInclude Include="tableau.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

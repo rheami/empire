@@ -7,7 +7,7 @@
 #include <cmath>
 #include <limits>
 #include "polygone.h"
-
+#include "Segment.h"
 // constructeur
 Polygone::Polygone(const Point* _points[])
 {
@@ -25,7 +25,19 @@ Polygone::~Polygone() {
 
 double Polygone::distance(const Polygone& poly2) const
 {
-    return 0;
+	double distance = DBL_MAX;
+	for (int i = 0; i < points.taille(); ++i)
+	{
+		Segment Segmenta(points[i], points[(i + 1) % points.taille()]);
+		for (int j = 0; j < poly2.points.taille(); ++j)
+		{
+			Segment Segmentb(poly2.points[j], poly2.points[(j + 1) % poly2.points.taille()]);
+			if (distance > Segmenta.distance(Segmentb))
+			{
+				distance = Segmenta.distance(Segmentb);
+			}
+		}
+	}
 }
 
 double Polygone::aire() const{

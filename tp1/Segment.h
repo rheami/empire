@@ -8,8 +8,10 @@
 class Segment
 {
 public:
-	Segment();
+	Segment(const Point& _A, const Point& _B);
 	~Segment();
+	double distance(const Segment& other);
+private:
 	Point A;
 	Point B;
 };

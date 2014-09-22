@@ -12,7 +12,7 @@
 class Point {
   public:
     Point(){}
-	Point(double _x, double _y);
+	Point(const double _x,const double _y);
 	Point(const Point& point);
 
 	double distance(const Point& point) const;
