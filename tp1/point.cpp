@@ -17,6 +17,19 @@ Point::Point(const double _x, const double _y)
   : x(_x), y(_y)
 {}
 
+Point Point::operator -(const Point& _b) const{
+    return Point(_b.X()-x, _b.Y()-y);
+}
+
+// produit scalaire
+double Point::operator *(const Point& _b) const{
+    return x*_b.X() + y*_b.Y();
+}
+// produit d'un nombre avec un vecteur
+Point Point::operator *(const double _b) const{
+    return Point(x*_b, y*_b);
+}
+
 double Point::distance(const Point& point) const {
     double dx=x-point.x,
            dy=y-point.y;

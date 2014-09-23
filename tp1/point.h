@@ -1,7 +1,7 @@
 /*
   INF3105 -- Structures de données et algorithmes
   UQAM | Département d'informatique
-  Automne 2014 | TP1 | point.h 
+  Automne 2014 | TP1 | point.h
 */
 
 #if !defined(__POINT_H__)
@@ -16,8 +16,16 @@ class Point {
 	Point(const Point& point);
 
 	double distance(const Point& point) const;
-	const double X() { return x; };
-	const double Y() { return y; };
+	double X() const { return x; };
+	double Y() const { return y; };
+
+	inline Point operator -(const Point& _b) const ;
+
+    // produit scalaire
+    inline double operator *(const Point& _b) const;
+    // produit d'un nombre avec un vecteur
+    Point operator *(const double _b) const;
+
   private:
     double x;
     double y;
