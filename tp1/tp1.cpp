@@ -57,7 +57,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 }
 
 int main(int argc, const char** argv){
-    
+
 	if(argc<3){
         cout << "./tp1 carte.txt nbRegions [distMax]" << endl;
         return 1;
@@ -77,9 +77,10 @@ int main(int argc, const char** argv){
     while(!in.eof()){
         Polygone *polygone = new Polygone;
         in >>  *polygone >> std::ws;
-        assert(deuxpoints==':');
 		Carte.ajouter(polygone);
+		cout << polygone->getNom() << polygone->aire() << endl;
     }
+
 
     switch(nbRegions){
         case 1:

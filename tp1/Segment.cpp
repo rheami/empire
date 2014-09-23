@@ -13,5 +13,5 @@ Segment::~Segment()
 }
 
 double Segment::distance(const Segment& other){
-
+  return 10.0; // todo
 }

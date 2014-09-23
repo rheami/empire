@@ -26,7 +26,7 @@ class Polygone {
 
 	// destructeur
 	~Polygone();
-    
+
 	const inline std::string getNom()const { return nom; };
     // calcule  l<aire a la creation
 
@@ -39,6 +39,7 @@ class Polygone {
     double aire_;
 
     string nom;
+    inline void calculeAire();
 
   friend std::ostream& operator << (std::ostream&, const Polygone&);
   friend std::istream& operator >> (std::istream&, Polygone&);

@@ -7,14 +7,20 @@ OPTIONS = -g -O0 -Wall
 
 all : tp1
 
-tp1 : tp1.cpp point.o polygone.o
-	g++ ${OPTIONS} -o tp1 tp1.cpp point.o polygone.o
-	
+tp1 : tp1.cpp point.o polygone.o segment.o
+	g++ ${OPTIONS} -o tp1 tp1.cpp point.o polygone.o segment.o
+
 point.o : point.cpp point.h
 	g++ ${OPTIONS} -c point.cpp
 
-polygone.o : polygone.cpp polygone.h point.h
+polygone.o : polygone.cpp polygone.h point.h segment.h
 	g++ ${OPTIONS} -c polygone.cpp
+
+segment.o : segment.cpp segment.h point.h
+	g++ ${OPTIONS} -c segment.cpp
+
+vecteur.o : vecteur.cpp vecteur.h
+	g++ ${OPTIONS} -c vecteur.cpp
 
 clean:
 	rm -rf tp1 *~ *.o
