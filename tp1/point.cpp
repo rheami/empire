@@ -17,17 +17,20 @@ Point::Point(const double _x, const double _y)
   : x(_x), y(_y)
 {}
 
-Point Point::operator -(const Point& _b) const{
-    return Point(_b.X()-x, _b.Y()-y);
+Point Point::operator-(const Point& autre) const{
+    return Point(x-autre.X(), y-autre.Y());
+}
+Point Point::operator+(const Point& autre) const{
+    return Point(x+autre.X(), y+autre.Y());
 }
 
 // produit scalaire
-double Point::operator *(const Point& _b) const{
-    return x*_b.X() + y*_b.Y();
+double Point::operator*(const Point& autre) const{
+    return x*autre.X() + y*autre.Y();
 }
 // produit d'un nombre avec un vecteur
-Point Point::operator *(const double _b) const{
-    return Point(x*_b, y*_b);
+Point Point::operator*(const double autre) const{
+    return Point(x*autre, y*autre);
 }
 
 double Point::distance(const Point& point) const {
@@ -35,7 +38,12 @@ double Point::distance(const Point& point) const {
            dy=y-point.y;
     return sqrt(dx*dx + dy*dy);
 }
-
+/*
+Point Point::projection(const Point& point) const {
+    double ratio = (this * point)/ (this * this);
+    return ratio * this;
+}
+*/
 std::ostream& operator << (std::ostream& os, const Point& point) {
   os << "(" << point.x << "," << point.y << ")";
   return os;

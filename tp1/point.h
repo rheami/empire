@@ -19,12 +19,14 @@ class Point {
 	double X() const { return x; };
 	double Y() const { return y; };
 
-	inline Point operator -(const Point& _b) const ;
+	Point operator-(const Point& autre) const;
+        Point operator+(const Point& autre) const;
 
     // produit scalaire
-    inline double operator *(const Point& _b) const;
+    double operator*(const Point& autre) const;
     // produit d'un nombre avec un vecteur
-    Point operator *(const double _b) const;
+    Point operator*(const double autre) const;
+    Point projection(const Point& point) const;
 
   private:
     double x;

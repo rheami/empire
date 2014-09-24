@@ -33,16 +33,14 @@ void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 	cout << round(Plusgrand->aire()) << endl;
 	cout << Plusgrand->getNom() << endl;
 
-}
 
+}
 
 void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 {
-
-
 	Polygone* Plusgrand;
 
-	int aire = 0;
+	double aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		if (aire < Carte[i]->aire())
@@ -51,11 +49,46 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 			Plusgrand = Carte[i];
 		}
 	}
-	cout << round(Plusgrand->aire()) << endl;
+	cout << Plusgrand->aire() << endl;
 	cout << Plusgrand->getNom() << endl;
-
 }
 
+void testppoints(){
+    Point A = Point(3, 3);
+    Point C = Point(1, 1);
+    Point D = Point(7, 1);
+    Point CA = A - C;
+    Point CD = D - C;
+    double num = CA * CD;
+    double denum = CD * CD;
+    cout << "CA : " << A << "-" << C << "=" << CA << endl;
+    cout << "CD : " << D << "-" << C << "=" << CD << endl;
+    cout << "CA * CD : " << num << endl;
+    cout << "CD * CD : " << denum << endl;
+    double ratio = num/denum;
+    ratio = ratio > 1 ? 1 : ratio;
+    cout << "ratio : " << ratio << endl;
+    Point projection = CD*ratio; // note: ne pas faire ratio * CD
+    cout << projection << endl;
+    Point E = C + projection;
+    cout << "E = " << E << endl;
+    cout << "distance AE = " << A.distance(E) << endl;
+    A = Point(9, 1);
+    CA = A - C;
+    num = CA * CD;
+    cout << "CA : " << A << "-" << C << "=" << CA << endl;
+    cout << "CD : " << D << "-" << C << "=" << CD << endl;
+    cout << "CA * CD : " << num << endl;
+    cout << "CD * CD : " << denum << endl;
+    ratio = num/denum;
+    cout << "ratio : " << ratio << endl;
+    ratio = ratio > 1 ? 1 : ratio;
+    projection = CD*ratio; // note: ne pas faire ratio * CD
+    cout << projection << endl;
+    E = C + projection;
+    cout << "E = " << E << endl;
+    cout << "distance AE = " << A.distance(E) << endl;
+}
 int main(int argc, const char** argv){
 
 	if(argc<3){
@@ -102,6 +135,7 @@ int main(int argc, const char** argv){
             break;
     }
 
+    testppoints();
 	// Netoyage de la memoire
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
