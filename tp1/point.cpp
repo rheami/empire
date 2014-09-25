@@ -38,12 +38,7 @@ double Point::distance(const Point& point) const {
            dy=y-point.y;
     return sqrt(dx*dx + dy*dy);
 }
-/*
-Point Point::projection(const Point& point) const {
-    double ratio = (this * point)/ (this * this);
-    return ratio * this;
-}
-*/
+
 std::ostream& operator << (std::ostream& os, const Point& point) {
   os << "(" << point.x << "," << point.y << ")";
   return os;

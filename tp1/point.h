@@ -20,13 +20,12 @@ class Point {
 	double Y() const { return y; };
 
 	Point operator-(const Point& autre) const;
-        Point operator+(const Point& autre) const;
+    Point operator+(const Point& autre) const;
 
     // produit scalaire
     double operator*(const Point& autre) const;
     // produit d'un nombre avec un vecteur
     Point operator*(const double autre) const;
-    Point projection(const Point& point) const;
 
   private:
     double x;

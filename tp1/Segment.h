@@ -8,12 +8,16 @@
 class Segment
 {
 public:
-	Segment(const Point& _A, const Point& _B);
+	Segment(const Point& _debut, const Point& _fin);
 	~Segment();
 	double distance(const Segment& other);
+
+    double distancePointSegment(Point& pointA ,const Segment& segmentCD);
+    Point getProjection(Point& point) const;
+
 private:
-	Point A;
-	Point B;
+	Point debut;
+	Point fin;
 };
 
 #endif
