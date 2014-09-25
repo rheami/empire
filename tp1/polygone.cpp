@@ -30,19 +30,18 @@ inline double min(double a, double b){
 // distance minimale entre deux polygones
 double Polygone::distance(const Polygone& poly2) const
 {
-	double distance = std::numeric_limits<double>::infinity();
-
-	for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
+    double distance = std::numeric_limits<double>::infinity();
+        
+    for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
+    {
+	Segment segmentDeA(points[i], points[(i + 1)%points.taille()]); // creer tout les segments De A ( 1 a chaque iteration)
+	for (int j = 0; j < poly2.points.taille(); ++j) // pour tout les points de B
 	{
-		Segment segmentDeA(points[i], points[(i + 1)%points.taille()]); // creer tout les segments De A ( 1 a chaque iteration)
-		for (int j = 0; j < poly2.points.taille(); ++j) // pour tout les points de B
-		{
-			Segment segmentDeB(poly2.points[j], poly2.points[(j + 1)%points.taille()]); // creer tout les segments De B
-
-			// todo : distance = min(distance, Segmenta.distance(Segmentb)); // fonction inline
-			distance = min(distance, segmentDeA.distance(segmentDeB));
-		}
+            Segment segmentDeB(poly2.points[j], poly2.points[(j + 1)%points.taille()]); // creer tout les segments De B
+            distance = min(distance, segmentDeA.distance(segmentDeB));
 	}
+    }
+    return distance;
 }
 
 double Polygone::aire() const{
