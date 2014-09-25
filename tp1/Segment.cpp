@@ -20,6 +20,7 @@ Point Segment::getProjection(Point& point) const {
     double denum = CD * CD;
     double ratio = num / denum;
     ratio = ratio > 1 ? 1 : ratio;
+    ratio = ratio < 0 ? 0 : ratio;
     Point projection = CD*ratio; // note: ne pas faire ratio * CD
     Point E = debut + projection;
     return E;

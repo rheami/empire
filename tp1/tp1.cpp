@@ -43,7 +43,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 	double aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
-		for (int j = 0; j < Carte.taille(); ++j)
+		for (int j = i+1; j < Carte.taille(); ++j)
 		{
 			std::cout << "disance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
@@ -63,9 +63,9 @@ double distancePointASegmentCD(Point& pointA , Point& pointC, Point& pointD) {
 }
 
 void testppoints(){
-    Point A = Point(3, 3);
-    Point C = Point(1, 1);
-    Point D = Point(7, 1);
+    Point A = Point(5, 10);
+    Point C = Point(20, 10);
+    Point D = Point(30, 10);
     Point CA = A - C;
     Point CD = D - C;
     double num = CA * CD;
@@ -76,6 +76,7 @@ void testppoints(){
     cout << "CD * CD : " << denum << endl;
     double ratio = num/denum;
     ratio = ratio > 1 ? 1 : ratio;
+    ratio = ratio < 0 ? 0 : ratio;
     cout << "ratio : " << ratio << endl;
     Point projection = CD*ratio; // note: ne pas faire ratio * CD
     cout << projection << endl;
@@ -143,7 +144,7 @@ int main(int argc, const char** argv){
             break;
     }
 
-    testppoints();
+    //testppoints();
 	// Netoyage de la memoire
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
