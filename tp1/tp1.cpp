@@ -33,31 +33,37 @@ void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 	cout << round(Plusgrand->aire()) << endl;
 	cout << Plusgrand->getNom() << endl;
 
-}
 
+}
 
 void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 {
-
-
 	Polygone* Plusgrand;
 
-	int aire = 0;
+	double aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
-		if (aire < Carte[i]->aire())
+		for (int j = i+1; j < Carte.taille(); ++j)
 		{
-			aire = Carte[i]->aire();
-			Plusgrand = Carte[i];
+			std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
-	cout << round(Plusgrand->aire()) << endl;
-	cout << Plusgrand->getNom() << endl;
+
 
 }
 
+double distancePointASegmentCD(Point& pointA , Point& pointC, Point& pointD) {
+    Point CA = pointA - pointC;
+    Point CD = pointD - pointC;
+    double ratio = (CA * CD) / (CD * CD);
+    ratio = ratio > 1 ? 1 : ratio;
+    Point projectionAsurCD = CD * ratio; // note: ne pas faire ratio * CD
+    Point pointE = pointC + projectionAsurCD;
+    return pointA.distance(pointE);
+}
+
 int main(int argc, const char** argv){
-    
+
 	if(argc<3){
         cout << "./tp1 carte.txt nbRegions [distMax]" << endl;
         return 1;
@@ -77,9 +83,10 @@ int main(int argc, const char** argv){
     while(!in.eof()){
         Polygone *polygone = new Polygone;
         in >>  *polygone >> std::ws;
-        assert(deuxpoints==':');
 		Carte.ajouter(polygone);
+		cout << polygone->getNom() << polygone->aire() << endl;
     }
+
 
     switch(nbRegions){
         case 1:
@@ -91,9 +98,6 @@ int main(int argc, const char** argv){
         {
 
 			MethodeDeuxPolygone(Carte);
-            cout << round(0) << endl;
-            cout << "A" << endl;
-            cout << "B" << endl;
             break;
         }
         default:

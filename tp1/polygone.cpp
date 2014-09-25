@@ -12,6 +12,7 @@
 Polygone::Polygone(const Point* _points[])
 {
 }
+
 Polygone::Polygone()
 {
 }
@@ -19,29 +20,42 @@ Polygone::Polygone()
 
 // destructeur
 Polygone::~Polygone() {
-	
+
 }
 
 
+// distance minimale entre deux polygones
 double Polygone::distance(const Polygone& poly2) const
 {
-	double distance = DBL_MAX;
-	for (int i = 0; i < points.taille(); ++i)
+    double distance = std::numeric_limits<double>::infinity();
+        
+    for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
+    {
+	Segment segmentDeA(points[i], points[(i + 1)%points.taille()]); // creer tout les segments De A ( 1 a chaque iteration)
+	for (int j = 0; j < poly2.points.taille(); ++j) // pour tout les points de B
 	{
-		Segment Segmenta(points[i], points[(i + 1) % points.taille()]);
-		for (int j = 0; j < poly2.points.taille(); ++j)
-		{
-			Segment Segmentb(poly2.points[j], poly2.points[(j + 1) % poly2.points.taille()]);
-			if (distance > Segmenta.distance(Segmentb))
-			{
-				distance = Segmenta.distance(Segmentb);
-			}
-		}
+            Segment segmentDeB(poly2.points[j], poly2.points[(j + 1)%points.taille()]); // creer tout les segments De B
+            distance = min(distance, segmentDeA.distance(segmentDeB));
 	}
+    }
+    return distance;
 }
 
 double Polygone::aire() const{
     return aire_;
+}
+
+inline void Polygone::calculeAire() {
+
+	double  area = 0;
+	int j = points.taille() - 1;
+	for (int i = 0; i< points.taille(); ++i)
+	{
+		area = area + (points[j].X() + points[i].X()) * (points[j].Y() - points[i].Y());
+		j = i;  //j is previous vertex to i
+	}
+	aire_ =  fabs(area/2);
+
 }
 
 std::ostream& operator << (std::ostream& os, const Polygone& polygone){
@@ -55,7 +69,7 @@ std::ostream& operator << (std::ostream& os, const Polygone& polygone){
 		os << polygone.points[i];
 	}
 
-	
+
 
     return os;
 }
@@ -74,15 +88,10 @@ std::istream& operator >> (std::istream& in, Polygone& polygone){
 		in >> polygone.points[polygone.points.taille()-1] >> c >> std::ws;
     }while(c==',');
     assert(c==';');
-	int  area = 0;
-	int j = polygone.points.taille() - 1;
-	for (int i = 0; i<polygone.points.taille(); ++i)
-	{
-		area = area + (polygone.points[j].X() + polygone.points[i].X()) * (polygone.points[j].Y() - polygone.points[i].Y());
-		j = i;  //j is previous vertex to i
-	}
-	polygone.aire_ = area/2;
+
+    polygone.calculeAire();
 	polygone.nom = nom;
+
     return in;
 }
 
