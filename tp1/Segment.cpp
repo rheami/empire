@@ -13,7 +13,7 @@ Segment::~Segment()
 {
 }
 
-Point Segment::getProjection(Point& point) const {
+Point Segment::getProjection(const  Point& point) const {
     Point CA = point - debut;
     Point CD = fin - debut;
     double num = CA * CD;
@@ -26,15 +26,18 @@ Point Segment::getProjection(Point& point) const {
     return E;
 }
 
-double Segment::distancePointSegment(Point& pointA , const Segment& segmentCD) {
+double Segment::distancePointSegment(const Point& pointA, const Segment& segmentCD) const {
     Point pointE = segmentCD.getProjection(pointA);
     double distance = pointA.distance(pointE);
-    std::cout << pointA << segmentCD << distance << std::endl;
+    //std::cout << pointA << segmentCD << distance << std::endl;
     return distance;
 }
 //
-double Segment::distance(const Segment& other){
-  double distance = distancePointSegment(debut, other);
+double Segment::distance(const Segment& other) const  {
+	double distance = distancePointSegment(debut, other);
+	distance = min(distancePointSegment(fin, other), distance);
+	distance = min(distancePointSegment(other.debut, *this), distance);
+	distance = min(distancePointSegment(other.fin, *this), distance);
 
   return distance;
 }

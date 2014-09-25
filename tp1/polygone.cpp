@@ -23,9 +23,6 @@ Polygone::~Polygone() {
 
 }
 
-inline double min(double a, double b){
-    return a < b ? a : b;
-}
 
 // distance minimale entre deux polygones
 double Polygone::distance(const Polygone& poly2) const

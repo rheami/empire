@@ -36,5 +36,8 @@ class Point {
   friend std::istream& operator >> (std::istream&, Point&);
 };
 
+inline double min(double a, double b){
+	return a < b ? a : b;
+}
 #endif
 
