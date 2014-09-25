@@ -43,14 +43,13 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 	double aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
-		if (aire < Carte[i]->aire())
+		for (int j = 0; j < Carte.taille(); ++j)
 		{
-			aire = Carte[i]->aire();
-			Plusgrand = Carte[i];
+			std::cout << "disance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
-	cout << Plusgrand->aire() << endl;
-	cout << Plusgrand->getNom() << endl;
+
+
 }
 
 void testppoints(){
