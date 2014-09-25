@@ -45,7 +45,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
 		{
-			std::cout << "disance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
+			std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
 
@@ -60,45 +60,6 @@ double distancePointASegmentCD(Point& pointA , Point& pointC, Point& pointD) {
     Point projectionAsurCD = CD * ratio; // note: ne pas faire ratio * CD
     Point pointE = pointC + projectionAsurCD;
     return pointA.distance(pointE);
-}
-
-void testppoints(){
-    Point A = Point(5, 10);
-    Point C = Point(20, 10);
-    Point D = Point(30, 10);
-    Point CA = A - C;
-    Point CD = D - C;
-    double num = CA * CD;
-    double denum = CD * CD;
-    cout << "CA : " << A << "-" << C << "=" << CA << endl;
-    cout << "CD : " << D << "-" << C << "=" << CD << endl;
-    cout << "CA * CD : " << num << endl;
-    cout << "CD * CD : " << denum << endl;
-    double ratio = num/denum;
-    ratio = ratio > 1 ? 1 : ratio;
-    ratio = ratio < 0 ? 0 : ratio;
-    cout << "ratio : " << ratio << endl;
-    Point projection = CD*ratio; // note: ne pas faire ratio * CD
-    cout << projection << endl;
-    Point E = C + projection;
-    cout << "E = " << E << endl;
-    cout << "distance AE = " << A.distance(E) << endl;
-    A = Point(9, 1);
-    CA = A - C;
-    num = CA * CD;
-    cout << "CA : " << A << "-" << C << "=" << CA << endl;
-    cout << "CD : " << D << "-" << C << "=" << CD << endl;
-    cout << "CA * CD : " << num << endl;
-    cout << "CD * CD : " << denum << endl;
-    ratio = num/denum;
-    cout << "ratio : " << ratio << endl;
-    ratio = ratio > 1 ? 1 : ratio;
-    projection = CD*ratio; // note: ne pas faire ratio * CD
-    cout << projection << endl;
-    E = C + projection;
-    cout << "E = " << E << endl;
-    cout << "distance AE = " << A.distance(E) << endl;
-    cout << distancePointASegmentCD(A, C, D) << endl;
 }
 
 int main(int argc, const char** argv){
@@ -144,7 +105,6 @@ int main(int argc, const char** argv){
             break;
     }
 
-    //testppoints();
 	// Netoyage de la memoire
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
