@@ -52,6 +52,16 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
 
 }
 
+double distancePointASegmentCD(Point& pointA , Point& pointC, Point& pointD) {
+    Point CA = pointA - pointC;
+    Point CD = pointD - pointC;
+    double ratio = (CA * CD) / (CD * CD);
+    ratio = ratio > 1 ? 1 : ratio;
+    Point projectionAsurCD = CD * ratio; // note: ne pas faire ratio * CD
+    Point pointE = pointC + projectionAsurCD;
+    return pointA.distance(pointE);
+}
+
 void testppoints(){
     Point A = Point(3, 3);
     Point C = Point(1, 1);
@@ -87,7 +97,9 @@ void testppoints(){
     E = C + projection;
     cout << "E = " << E << endl;
     cout << "distance AE = " << A.distance(E) << endl;
+    cout << distancePointASegmentCD(A, C, D) << endl;
 }
+
 int main(int argc, const char** argv){
 
 	if(argc<3){
