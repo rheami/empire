@@ -27,7 +27,9 @@ Point Segment::getProjection(Point& point) const {
 
 double Segment::distancePointSegment(Point& pointA , const Segment& segmentCD) {
     Point pointE = segmentCD.getProjection(pointA);
-    return pointA.distance(pointE);
+    double distance = pointA.distance(pointE);
+    cout << pointA << segmentCD << distance << endl;
+    return distance;
 }
 //
 double Segment::distance(const Segment& other){
