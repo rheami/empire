@@ -92,9 +92,6 @@ int main(int argc, const char** argv){
         {
 
 			MethodeDeuxPolygone(Carte);
-            cout << round(0) << endl;
-            cout << "A" << endl;
-            cout << "B" << endl;
             break;
         }
         default:

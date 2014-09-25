@@ -51,7 +51,7 @@ double Polygone::aire() const{
 
 inline void Polygone::calculeAire() {
 
-	int  area = 0;
+	double  area = 0;
 	int j = points.taille() - 1;
 	for (int i = 0; i< points.taille(); ++i)
 	{
