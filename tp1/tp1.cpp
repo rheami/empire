@@ -45,7 +45,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
 		{
-			if ((DM>=Carte[i]->distance(*Carte[j]))&&((Carte[i]->aire()+Carte[j]->aire())>aire))
+			if (((Carte[i]->aire() + Carte[j]->aire())>aire)&&(DM >= Carte[i]->distance(*Carte[j])))
 			{
 				PolyA = Carte[i];
 				PolyB = Carte[j];

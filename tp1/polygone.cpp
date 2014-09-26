@@ -51,7 +51,7 @@ inline void Polygone::calculeAire() {
 	int j = points.taille() - 1;
 	for (int i = 0; i< points.taille(); ++i)
 	{
-		area = area + (points[j].X() + points[i].X()) * (points[j].Y() - points[i].Y());
+		area = area + (points[j].area(points[i]));
 		j = i;  //j is previous vertex to i
 	}
 	aire_ =  fabs(area/2);
