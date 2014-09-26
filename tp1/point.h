@@ -15,27 +15,27 @@ class Point {
 	Point(const double _x,const double _y);
 	Point(const Point& point);
 
-	inline Point Point::operator-(const Point& autre) const{
+	 Point Point::operator-(const Point& autre) const{
 		return Point(x - autre.x, y - autre.y);
 	}
-	inline Point Point::operator+(const Point& autre) const{
+	 Point Point::operator+(const Point& autre) const{
 		return Point(x + autre.x, y + autre.y);
 	}
 
 	// produit scalaire
-	inline double Point::operator*(const Point& autre) const{
+	 double Point::operator*(const Point& autre) const{
 		return x*autre.x + y*autre.y;
 	}
 	// produit d'un nombre avec un vecteur
-	inline Point Point::operator*(const double autre) const{
+	 Point Point::operator*(const double autre) const{
 		return Point(x*autre, y*autre);
 	}
 
-	inline double Point::area(const Point& point) const {
+	 double Point::area(const Point& point) const {
 		return (point.x + x) * (point.y - y);
 	}
 
-	inline double Point::distance(const Point& point) const {
+	 double Point::distance(const Point& point) const {
 		double dx = x - point.x,
 			dy = y - point.y;
 		return sqrt(dx*dx + dy*dy);
