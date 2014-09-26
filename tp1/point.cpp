@@ -18,15 +18,15 @@ Point::Point(const double _x, const double _y)
 {}
 
 Point Point::operator-(const Point& autre) const{
-    return Point(x-autre.X(), y-autre.Y());
+    return Point(x-autre.x, y-autre.y);
 }
 Point Point::operator+(const Point& autre) const{
-    return Point(x+autre.X(), y+autre.Y());
+    return Point(x+autre.x, y+autre.y);
 }
 
 // produit scalaire
 double Point::operator*(const Point& autre) const{
-    return x*autre.X() + y*autre.Y();
+    return x*autre.x + y*autre.y;
 }
 // produit d'un nombre avec un vecteur
 Point Point::operator*(const double autre) const{

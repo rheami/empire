@@ -15,7 +15,7 @@
 using namespace std;
 
 
-void MethodeUnPolygone(Tableau<Polygone*> &Carte)
+void MethodeUnPolygone(Tableau<Polygone*> &Carte,double DM)
 {
 
 
@@ -36,19 +36,32 @@ void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 
 }
 
-void MethodeDeuxPolygone(Tableau<Polygone*> &Carte)
+void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 {
-	Polygone* Plusgrand;
-
+	Polygone* PolyA = NULL;
+	Polygone* PolyB = NULL;
 	double aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
 		{
-			std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
+			if ((DM>=Carte[i]->distance(*Carte[j]))&&((Carte[i]->aire()+Carte[j]->aire())>aire))
+			{
+				PolyA = Carte[i];
+				PolyB = Carte[j];
+				aire = Carte[i]->aire() + Carte[j]->aire();
+			}
+			//std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
-
+	if (PolyA)
+	{
+		std::cout << round(aire) << std::endl << PolyA->getNom() << std::endl << PolyB->getNom() << std::endl;
+	}
+	else
+	{
+		MethodeUnPolygone(Carte, DM);
+	}
 
 }
 
@@ -84,20 +97,19 @@ int main(int argc, const char** argv){
         Polygone *polygone = new Polygone;
         in >>  *polygone >> std::ws;
 		Carte.ajouter(polygone);
-		cout << polygone->getNom() << polygone->aire() << endl;
     }
 
 
     switch(nbRegions){
         case 1:
         {
-			MethodeUnPolygone(Carte);
+			MethodeUnPolygone(Carte,DM);
             break;
         }
         case 2:
         {
 
-			MethodeDeuxPolygone(Carte);
+			MethodeDeuxPolygone(Carte,DM);
             break;
         }
         default:
