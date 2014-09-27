@@ -15,10 +15,8 @@
 using namespace std;
 
 
-void MethodeUnPolygone(Tableau<Polygone*> &Carte,double DM)
+void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 {
-
-
 	Polygone* Plusgrand;
 
 	int aire = 0;
@@ -45,7 +43,8 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
 		{
-			if (((Carte[i]->aire() + Carte[j]->aire())>aire)&&(DM >= Carte[i]->distance(*Carte[j])))
+			if ( ((Carte[i]->aire()+Carte[j]->aire())>aire)
+                && (DM>=Carte[i]->distance(*Carte[j])) )
 			{
 				PolyA = Carte[i];
 				PolyB = Carte[j];
@@ -60,7 +59,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 	}
 	else
 	{
-		MethodeUnPolygone(Carte, DM);
+		MethodeUnPolygone(Carte);
 	}
 
 }
@@ -103,7 +102,7 @@ int main(int argc, const char** argv){
     switch(nbRegions){
         case 1:
         {
-			MethodeUnPolygone(Carte,DM);
+			MethodeUnPolygone(Carte);
             break;
         }
         case 2:

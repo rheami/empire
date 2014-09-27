@@ -28,7 +28,7 @@ Polygone::~Polygone() {
 double Polygone::distance(const Polygone& poly2) const
 {
     double distance = std::numeric_limits<double>::infinity();
-        
+
     for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
     {
 	Segment segmentDeA(points[i], points[(i + 1)%points.taille()]); // creer tout les segments De A ( 1 a chaque iteration)
@@ -47,14 +47,14 @@ double Polygone::aire() const{
 
 inline void Polygone::calculeAire() {
 
-	double  area = 0;
+	double  aire = 0;
 	int j = points.taille() - 1;
 	for (int i = 0; i< points.taille(); ++i)
 	{
-		area = area + (points[j].area(points[i]));
-		j = i;  //j is previous vertex to i
+		aire = aire + points[i].aire(points[j]);
+		j = i;
 	}
-	aire_ =  fabs(area/2);
+	aire_ =  fabs(aire/2);
 
 }
 
