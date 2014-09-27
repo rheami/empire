@@ -5,7 +5,6 @@
 */
 
 #include <assert.h>
-#include <math.h>
 #include "point.h"
 
 Point::Point(const Point& point)

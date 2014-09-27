@@ -9,7 +9,6 @@
 #include <iostream>
 #include "point.h"
 #include "tableau.h"
-#include "vecteur.h"
 #include <string>
 
 using namespace std;

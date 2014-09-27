@@ -6,7 +6,7 @@
 
 #if !defined(__POINT_H__)
 #define __POINT_H__
-
+#include <math.h>
 #include <iostream>
 
 class Point {
@@ -15,27 +15,28 @@ class Point {
 	Point(const double _x,const double _y);
 	Point(const Point& point);
 
-	 Point Point::operator-(const Point& autre) const{
+    Point operator-(const Point& autre) const{
 		return Point(x - autre.x, y - autre.y);
 	}
-	 Point Point::operator+(const Point& autre) const{
+
+    Point operator+(const Point& autre) const{
 		return Point(x + autre.x, y + autre.y);
 	}
 
 	// produit scalaire
-	 double Point::operator*(const Point& autre) const{
+	double operator*(const Point& autre) const{
 		return x*autre.x + y*autre.y;
 	}
 	// produit d'un nombre avec un vecteur
-	 Point Point::operator*(const double autre) const{
+	Point operator*(const double autre) const{
 		return Point(x*autre, y*autre);
 	}
 
-	 double Point::area(const Point& point) const {
+	double area(const Point& point) const {
 		return (point.x + x) * (point.y - y);
 	}
 
-	 double Point::distance(const Point& point) const {
+	double distance(const Point& point) const {
 		double dx = x - point.x,
 			dy = y - point.y;
 		return sqrt(dx*dx + dy*dy);
