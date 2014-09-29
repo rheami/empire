@@ -39,6 +39,20 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 	Polygone* PolyA = NULL;
 	Polygone* PolyB = NULL;
 	double aire = 0;
+
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		if (aire < Carte[i]->aire())
+		{
+			aire = Carte[i]->aire();
+			PolyA = Carte[i];
+			PolyB = NULL;
+		}
+	}
+
+
+
+
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
@@ -53,13 +67,17 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 			//std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
-	if (PolyA)
+
+
+
+	if (PolyB)
 	{
+		
 		std::cout << round(aire) << std::endl << PolyA->getNom() << std::endl << PolyB->getNom() << std::endl;
 	}
 	else
 	{
-		MethodeUnPolygone(Carte);
+		std::cout << round(aire) << std::endl << PolyA->getNom() << std::endl;
 	}
 
 }

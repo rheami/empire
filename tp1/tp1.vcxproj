@@ -90,6 +90,52 @@
     <ClInclude Include="Segment.h" />
     <ClInclude Include="tableau.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Release\carte00.txt" />
+    <Text Include="..\Release\carte01.txt" />
+    <Text Include="..\Release\carte03.txt" />
+    <Text Include="..\Release\carte04.txt" />
+    <Text Include="..\Release\carte05.txt" />
+    <Text Include="..\Release\nuage1.txt" />
+    <Text Include="..\Release\nuage2.txt" />
+    <Text Include="..\Release\nuage3.txt" />
+    <Text Include="..\Release\nuage4.txt" />
+    <Text Include="..\Release\nuage5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Release\carte00_1.resultat" />
+    <None Include="..\Release\carte00_2-1.resultat" />
+    <None Include="..\Release\carte00_2-10.resultat" />
+    <None Include="..\Release\carte00_2-100.resultat" />
+    <None Include="..\Release\carte00_2-50.resultat" />
+    <None Include="..\Release\carte00_2.resultat" />
+    <None Include="..\Release\carte01_1.resultat" />
+    <None Include="..\Release\carte01_2-1.resultat" />
+    <None Include="..\Release\carte01_2-10.resultat" />
+    <None Include="..\Release\carte01_2-100.resultat" />
+    <None Include="..\Release\carte01_2-50.resultat" />
+    <None Include="..\Release\carte01_2.resultat" />
+    <None Include="..\Release\carte02_1.resultat" />
+    <None Include="..\Release\carte02_2-1.resultat" />
+    <None Include="..\Release\carte02_2-10.resultat" />
+    <None Include="..\Release\carte02_2-100.resultat" />
+    <None Include="..\Release\carte02_2-50.resultat" />
+    <None Include="..\Release\carte02_2.resultat" />
+    <None Include="..\Release\carte03_1.resultat" />
+    <None Include="..\Release\carte03_2-1.resultat" />
+    <None Include="..\Release\carte03_2-10.resultat" />
+    <None Include="..\Release\carte03_2-100.resultat" />
+    <None Include="..\Release\carte03_2-50.resultat" />
+    <None Include="..\Release\carte03_2.resultat" />
+    <None Include="..\Release\carte04_1.resultat" />
+    <None Include="..\Release\Labo1.exe" />
+    <None Include="..\Release\Labo1.pdb" />
+    <None Include="..\Release\Labo2.exe" />
+    <None Include="..\Release\Labo2.pdb" />
+    <None Include="..\Release\UQAM 3105.pdb" />
+    <None Include="..\Release\UQAM3105.exe" />
+    <None Include="..\Release\UQAM31052.exe" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
