@@ -27,21 +27,23 @@ Polygone::~Polygone() {
 // distance minimale entre deux polygones
 double Polygone::distance(const Polygone& poly2) const
 {
-    double distance = std::numeric_limits<double>::infinity();
+	double distance = std::numeric_limits<double>::infinity();
+	int incrementA = points.taille() > 200 ? 1 : ((points.taille() / 100));
 
-    for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
-    {
-	Segment segmentDeA(points[i], points[(i + 1)%(points.taille()-1)]); // creer tout les segments De A ( 1 a chaque iteration)
-	//cout << segmentDeA << endl;
-	for (int j = 0; j < poly2.points.taille(); ++j) // pour tout les points de B
+	int incrementB = poly2.points.taille() > 200 ? 1 : ((poly2.points.taille() / 100));
+	for (int i = 0; i < points.taille(); i += incrementA) // pour tout les points de A
 	{
-		Segment segmentDeB(poly2.points[j], poly2.points[(j + 1) % (poly2.points.taille() - 1)]); // creer tout les segments De B
-		//	cout << segmentDeB << endl;
-            distance = min(distance, segmentDeA.distance(segmentDeB));
+		Segment segmentDeA(points[i], points[((i + incrementA)<points.taille()?(i+incrementA):0)]); // creer tout les segments De A ( 1 a chaque iteration)
+		//cout << segmentDeA << endl;
+		for (int j = 0; j < poly2.points.taille(); j += incrementB) // pour tout les points de B
+		{
+			Segment segmentDeB(poly2.points[j], poly2.points[((j + incrementB)<poly2.points.taille() ? (j + incrementB) : 0)]); // creer tout les segments De B
+			//	cout << segmentDeB << endl;
+			distance = min(distance, segmentDeA.distance(segmentDeB));
+		}
 	}
-    }
-    //std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
-    return distance;
+	std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
+	return distance;
 }
 
 double Polygone::aire() const{
