@@ -31,13 +31,16 @@ double Polygone::distance(const Polygone& poly2) const
 
     for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
     {
-	Segment segmentDeA(points[i], points[(i + 1)%points.taille()]); // creer tout les segments De A ( 1 a chaque iteration)
+	Segment segmentDeA(points[i], points[(i + 1)%(points.taille()-1)]); // creer tout les segments De A ( 1 a chaque iteration)
+	cout << segmentDeA << endl;
 	for (int j = 0; j < poly2.points.taille(); ++j) // pour tout les points de B
 	{
-            Segment segmentDeB(poly2.points[j], poly2.points[(j + 1)%points.taille()]); // creer tout les segments De B
+		Segment segmentDeB(poly2.points[j], poly2.points[(j + 1) % (poly2.points.taille() - 1)]); // creer tout les segments De B
+			cout << segmentDeB << endl;
             distance = min(distance, segmentDeA.distance(segmentDeB));
 	}
     }
+    std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
     return distance;
 }
 
@@ -46,7 +49,7 @@ double Polygone::aire() const{
 }
 
 inline void Polygone::calculeAire() {
-
+    std::cout << "calcule de l'aire de " << nom;
 	double  aire = 0;
 	int j = points.taille() - 1;
 	for (int i = 0; i< points.taille(); ++i)
@@ -55,6 +58,7 @@ inline void Polygone::calculeAire() {
 		j = i;
 	}
 	aire_ =  fabs(aire/2);
+	std::cout << " = " << round(aire_) << std::endl;
 
 }
 
@@ -69,13 +73,10 @@ std::ostream& operator << (std::ostream& os, const Polygone& polygone){
 		os << polygone.points[i];
 	}
 
-
-
     return os;
 }
 
 std::istream& operator >> (std::istream& in, Polygone& polygone){
-    // À compléter­.
 
 	string nom;
 
