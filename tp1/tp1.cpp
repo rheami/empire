@@ -17,7 +17,7 @@ using namespace std;
 
 void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 {
-	Polygone* Plusgrand;
+	Polygone* Plusgrand = NULL;
 
 	int aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)

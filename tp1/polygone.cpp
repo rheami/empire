@@ -7,7 +7,7 @@
 #include <cmath>
 #include <limits>
 #include "polygone.h"
-#include "Segment.h"
+#include "segment.h"
 // constructeur
 Polygone::Polygone(const Point* _points[])
 {
