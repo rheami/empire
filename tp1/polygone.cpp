@@ -29,7 +29,7 @@ double Polygone::distance(const Polygone& poly2) const
 {
 	double distance = std::numeric_limits<double>::infinity();
 
-	if (points.taille() < 100 && poly2.points.taille() < 100)
+	if (points.taille() <= 100 && poly2.points.taille() <= 100)
 	{
 		for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
 		{
@@ -45,12 +45,16 @@ double Polygone::distance(const Polygone& poly2) const
 	else
 	{
 
-		int incrementA = ((points.taille() / 100));
+		int incrementA = max((points.taille() / 100),1);
 
-		int incrementB = ((poly2.points.taille() / 100));
+		int incrementB = max((poly2.points.taille() / 100),1);
 
 
+		int departA = 0;
+		int departB = 0;
 
+		int finA = 0;
+		int finB = 0;
 
 		for (int i = 0; i < points.taille(); i += incrementA) // pour tout les points de A
 		{
@@ -59,10 +63,57 @@ double Polygone::distance(const Polygone& poly2) const
 			for (int j = 0; j < poly2.points.taille(); j += incrementB) // pour tout les points de B
 			{
 				Segment segmentDeB(poly2.points[j], poly2.points[((j + incrementB) < poly2.points.taille() ? (j + incrementB) : 0)]); // creer tout les segments De B
-				//	cout << segmentDeB << endl;
-				distance = min(distance, segmentDeA.distance(segmentDeB));
+				double tempdistance = segmentDeA.distance(segmentDeB);
+				if (tempdistance < distance)
+				{
+					distance = tempdistance;
+
+					departA = i;
+					finA = i + incrementA;
+					departB = j;
+					finB = j + incrementB;
+				}
 			}
 		}
+		do
+		{
+			incrementA = max(((departA - finA) / 4),1);
+
+			incrementB = max(((departB - finB) / 4),1);
+
+			distance = std::numeric_limits<double>::infinity();
+
+			int tdepartA = 0;
+			int tdepartB = 0;
+
+			int tfinA = 0;
+			int tfinB = 0;
+			for (int i = departA; i < finA; i += incrementA) // pour tout les points de A
+			{
+				Segment segmentDeA(points[i], points[((i + incrementA) < points.taille() ? (i + incrementA) : 0)]); // creer tout les segments De A ( 1 a chaque iteration)
+				//cout << incrementA << endl;
+				for (int j = departB; j < finB; j += incrementB) // pour tout les points de B
+				{
+					Segment segmentDeB(poly2.points[j], poly2.points[((j + incrementB) < poly2.points.taille() ? (j + incrementB) : 0)]); // creer tout les segments De B
+					double tempdistance = segmentDeA.distance(segmentDeB);
+					if (tempdistance < distance)
+					{
+						distance = tempdistance;
+
+						tdepartA = i;
+						tfinA = i + incrementA;
+						tdepartB = j;
+						tfinB = j + incrementB;
+					}
+				}
+			}
+
+			departA = tdepartA;
+			departB = tdepartB;
+
+			finA = tfinA;
+			finB =  tfinB;
+		} while (incrementA != 1 || incrementB != 1);
 	}
 	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
 	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
