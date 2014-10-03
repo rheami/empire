@@ -87,6 +87,5 @@
     <None Include="..\Release\UQAM 3105.pdb" />
     <None Include="..\Release\UQAM3105.exe" />
     <None Include="..\Release\UQAM31052.exe" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
