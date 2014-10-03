@@ -1,5 +1,5 @@
-#include "Segment.h"
-#include "Point.h"
+#include "segment.h"
+#include "point.h"
 
 
 Segment::Segment(const Point& _debut, const Point& _fin)

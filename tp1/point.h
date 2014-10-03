@@ -8,6 +8,7 @@
 #define __POINT_H__
 
 #include <iostream>
+#include <math.h>
 
 class Point {
   public:
@@ -15,19 +16,34 @@ class Point {
 	Point(const double _x,const double _y);
 	Point(const Point& point);
 
-	Point operator-(const Point& autre) const;
-    Point operator+(const Point& autre) const;
-    // produit scalaire
-    double operator*(const Point& autre) const;
-    // produit d'un nombre avec un vecteur
-    Point operator*(const double autre) const;
-	double distance(const Point& point) const;
-	double aire(const Point& point) const;
+	inline Point operator-(const Point& autre) const {
+		return Point(x - autre.x, y - autre.y);
+	}
+	inline Point operator+(const Point& autre) const{
+		return Point(x + autre.x, y + autre.y);
+	}
+	// produit scalaire
+	inline double operator*(const Point& autre) const{
+		return x*autre.x + y*autre.y;
+	}
+	// produit d'un nombre avec un vecteur
+	inline Point operator*(const double autre) const{
+		return Point(x*autre, y*autre);
+	}
+	// distance entre notre point et le point en parametre
+	inline double distance(const Point& point) const {
+		double dx = x - point.x,
+			dy = y - point.y;
+		return sqrt(dx*dx + dy*dy);
+	}
+	// fonction qui retourne le double de la surface entre l'axe y notre point et le point en parametre
+	inline double aire(const Point& point) const {
+		return (point.x + x) * (point.y - y);
+	}
 
   private:
     double x;
     double y;
-
 
   friend std::ostream& operator << (std::ostream&, const Point&);
   friend std::istream& operator >> (std::istream&, Point&);
@@ -35,6 +51,9 @@ class Point {
 
 inline double min(double a, double b){
 	return a < b ? a : b;
+}
+inline double max(double a, double b){
+		return a > b ? a : b;
 }
 #endif
 

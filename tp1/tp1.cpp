@@ -15,9 +15,9 @@
 using namespace std;
 
 
-void MethodeUnPolygone(Tableau<Polygone*> &Carte)
+void MethodeUnPolygone(const Tableau<Polygone*> &Carte)
 {
-	Polygone* Plusgrand;
+	Polygone* Plusgrand = NULL;
 
 	int aire = 0;
 	for (int i = 0; i < Carte.taille(); ++i)
@@ -34,12 +34,14 @@ void MethodeUnPolygone(Tableau<Polygone*> &Carte)
 
 }
 
-void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
+void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 {
 	Polygone* PolyA = NULL;
 	Polygone* PolyB = NULL;
 	double aire = 0;
 
+
+	//calcule l'aire des poligones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		if (aire < Carte[i]->aire())
@@ -52,7 +54,7 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 
 
 
-
+	//calcul de l'aire des couples de polygones si leur aire combine est superieur a celle du polygone ou couple de polygones actuel on verifie la distance
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
@@ -64,7 +66,6 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 				PolyB = Carte[j];
 				aire = Carte[i]->aire() + Carte[j]->aire();
 			}
-			//std::cout << "distance " << Carte[i]->getNom() << " " << Carte[j]->getNom() << " : " << Carte[i]->distance(*Carte[j]) << std::endl;
 		}
 	}
 
@@ -79,6 +80,125 @@ void MethodeDeuxPolygone(Tableau<Polygone*> &Carte, double DM)
 	{
 		std::cout << round(aire) << std::endl << PolyA->getNom() << std::endl;
 	}
+
+}
+
+
+inline bool Connect(const Tableau<Tableau<bool>>& matriceConnectivite, const int a , const int b)
+{
+	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
+}
+
+void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const int nb)
+{
+
+
+	int PolyA = 0;
+	int PolyB = -1;
+	double aire = 0;
+
+
+	//calcule l'aire des poligones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		if (aire < Carte[i]->aire())
+		{
+			aire = Carte[i]->aire();
+			PolyA = i;
+		}
+	}
+
+
+	//On battit une matrices de boolean representant les couples de polygones dont la distance est inferieur a DM 
+
+	Tableau<Tableau<bool>> matriceConnectivite;
+
+
+	//Remplir la dite matrice avec les couples valides on rempli uniquement la moitie car (DM(A,B)) = (DM(B,A))
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		for (int j = i + 1; j < Carte.taille(); ++j)
+		{
+			if ((DM >= Carte[i]->distance(*Carte[j])))
+			{
+				while (matriceConnectivite.taille() <= i)
+				{
+					matriceConnectivite.ajouter(Tableau<bool>());
+				}
+				//remplissage des cases vides ou non calcule
+				while (matriceConnectivite[i].taille() < j)
+				{
+					matriceConnectivite[i].ajouter(false);
+				}
+				matriceConnectivite[i].ajouter(true);
+			}
+		}
+	}
+
+
+
+	//on verifie les paires de taille interessante
+	for (int i = 0; i < Carte.taille(); ++i)
+	{
+		for (int j = i + 1; j < Carte.taille(); ++j)
+		{
+			if (((Carte[i]->aire() + Carte[j]->aire())>aire)
+				&& (Connect(matriceConnectivite, i, j)))
+			{
+				PolyA = i;
+				PolyB = j;
+				aire = Carte[i]->aire() + Carte[j]->aire();
+			}
+		}
+	}
+
+	//tableau des polygones trouve
+	Tableau<int> Poly;
+
+	//Ajouter le polygone de la plus grande taille trouve
+	Poly.ajouter(PolyA);
+
+	//ajouter le second polygone du couple si un couple as ete trouve
+	if (PolyB !=-1)
+	Poly.ajouter(PolyB);
+
+
+	//on parcoure tout les poligones qui peuvent etre ajouter a l'empire 
+	for (int p = Poly.taille()-1; p < nb; ++p)
+	{
+		PolyA = -1;
+		aire = 0;
+		for (int i = 0; i < Poly.taille(); ++i)
+		{
+			for (int j = i + 1; j < Carte.taille(); ++j)
+			{
+				if ((aire < Carte[j]->aire()) && (!Poly.contient(j)) && (Connect(matriceConnectivite, Poly[i], j)))
+				{
+					aire = Carte[j]->aire();
+					PolyA = j;
+				}
+			}
+		}
+		if (PolyA != -1)
+		Poly.ajouter(PolyA);
+	}
+
+	//on remet l'aire a 0 et on s'en resert pour calculer l'aire totale de l'assemblage trouve
+	aire = 0;
+
+	for (int i = 0; i < Poly.taille(); ++i)
+	{
+		aire += Carte[i]->aire();
+	}
+
+	//affichage de l'aire arondi
+	std::cout << round(aire) << std::endl;
+	//afichage de tout les polygones trouve
+	for (int i = 0; i < Poly.taille(); ++i)
+	{
+		std::cout << Carte[Poly[i]]->getNom() << std::endl;
+	}
+
 
 }
 
@@ -120,7 +240,7 @@ int main(int argc, const char** argv){
             break;
         }
         default:
-            cout << "Ce programme ne supporte pas 3 régions ou plus!" << endl;
+			MethodeTroisPolygone(Carte, DM, nbRegions);
             break;
     }
 
