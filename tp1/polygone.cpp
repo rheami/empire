@@ -28,7 +28,7 @@ Polygone::~Polygone() {
 double Polygone::distance(const Polygone& poly2) const
 {
 	double distance = std::numeric_limits<double>::infinity();
-
+	//si le polygone possede moins de 100 points on evalue la distance de chaque segement immediatement
 	if (points.taille() <= 100 && poly2.points.taille() <= 100)
 	{
 		for (int i = 0; i < points.taille(); ++i) // pour tout les points de A
@@ -115,8 +115,6 @@ double Polygone::distance(const Polygone& poly2) const
 			finB =  tfinB;
 		} while (incrementA != 1 || incrementB != 1);
 	}
-	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
-	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
 	return distance;
 }
 
