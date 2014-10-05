@@ -84,7 +84,7 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 }
 
 
-inline bool Connect(const Tableau<Tableau<bool>>& matriceConnectivite, const int a , const int b)
+inline bool Connect(const Tableau<Tableau<bool> > & matriceConnectivite, const int a , const int b)
 {
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
 }
@@ -111,7 +111,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 
 	//On battit une matrices de boolean representant les couples de polygones dont la distance est inferieur a DM 
 
-	Tableau<Tableau<bool>> matriceConnectivite;
+	Tableau<Tableau<bool> > matriceConnectivite;
 
 
 	//Remplir la dite matrice avec les couples valides on rempli uniquement la moitie car (DM(A,B)) = (DM(B,A))
@@ -203,7 +203,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 }
 
 int main(int argc, const char** argv){
-
+	
 	if(argc<3){
         cout << "./tp1 carte.txt nbRegions [distMax]" << endl;
         return 1;
@@ -249,5 +249,6 @@ int main(int argc, const char** argv){
 	{
 		delete Carte[i];
 	}
+	
     return 0;
 }
