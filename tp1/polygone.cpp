@@ -32,41 +32,54 @@ double Polygone::distance(const Polygone& poly2) const
 	// le polygone a plus de 10 points : évaluer sur 10 points (aproximation de la distance sur l'enveloppe)
 	// et recalculer sur les points de la section (on divise par 10)
 
-	int departA = 0;
-	int departB = 0;
-	int finA = points.taille();
-	int finB = poly2.points.taille();
+	int depart_A = 0;
+	int depart_B = 0;
+	int fin_A = points.taille();
+	int fin_B = poly2.points.taille();
 	int incrementA;
 	int incrementB;
-	int nbdiv =10;
+	int nbdiv = 10;
 	do
 	{
+		int departA = depart_A;
+		int finA = fin_A;
+		int departB = depart_B;
+		int finB = fin_B;
+
 		incrementA = max(( abs(finA - departA) / nbdiv), 1); 
 		incrementB = max(( abs(finB - departB) / nbdiv), 1);
-		
-		// pour les 100 points de A
+
+		// pour les nbdiv points de A
+		//cout << "A " << departA << " -> " << finA << endl;
 		for (int i = departA; i < finA; i += incrementA) 
 		{
 			// creer les segments de l'enveloppe De A
-			departA = i;
-			finA = (i + incrementA) < points.taille() ? (i + incrementA) : 0;
-			Segment segmentDeA(points[departA], points[finA]);
-			//cout << "A " << departA << " -> " << finA << endl;
-			// pour tout les 100 points de B
+			int nextA = (i + incrementA) < points.taille() ? (i + incrementA) : 0;
+			Segment segmentDeA(points[i], points[nextA]);
+			//cout << i << " -> " << nextA << endl;
+			// pour tout les nbdiv points de B
+			//cout << "B " << departB << " -> " << finB << endl;
 			for (int j = departB; j < finB; j += incrementB)
 			{
 				// creer les segments de l'enveloppe De B
-				departB = j;
-				finB = (j + incrementB) < poly2.points.taille() ? (j + incrementB) : 0;
-				Segment segmentDeB(poly2.points[departB], poly2.points[finB]);
+				int nextB = (j + incrementB) < poly2.points.taille() ? (j + incrementB) : 0;
+				Segment segmentDeB(poly2.points[j], poly2.points[nextB]);
+				//cout << j << " -> " << nextB << endl;
 				//cout << "B " << departB << " -> " << finB << endl;
-				distance = min(distance, segmentDeA.distance(segmentDeB));
+				double distanceTmp = segmentDeA.distance(segmentDeB);
+				//cout << "distance = " << distanceTmp << endl;
+				if (distanceTmp < distance) {
+					distance = distanceTmp;
+					depart_A = i;
+					fin_A = nextA;
+					depart_B = j;
+					fin_B = nextB;
+				}
 			}
 		}
 
 	} while (incrementA != 1 || incrementB != 1);
 	
-	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
 	//std::cout << "distance entre" << nom << " et " << poly2.nom << " = " << distance << std::endl;
 	return distance;
 }
