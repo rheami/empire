@@ -203,7 +203,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 }
 
 int main(int argc, const char** argv){
-	cout << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << endl;
+	
 	if(argc<3){
         cout << "./tp1 carte.txt nbRegions [distMax]" << endl;
         return 1;
@@ -249,6 +249,6 @@ int main(int argc, const char** argv){
 	{
 		delete Carte[i];
 	}
-	cout << "done" << endl;
+	
     return 0;
 }

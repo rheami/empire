@@ -28,9 +28,9 @@ Polygone::~Polygone() {
 double Polygone::distance(const Polygone& poly2) const
 {
 	double distance = std::numeric_limits<double>::infinity();
-	// si le polygone a moins de 10 points : évaluer touts les segments
-	// le polygone a plus de 10 points : évaluer sur 10 points (aproximation de la distance sur l'enveloppe)
-	// et recalculer sur les points de la section (on divise par 10)
+	// si le polygone a moins de 100 points : évaluer touts les segments
+	// si le polygone a plus de 100 points : évaluer sur 100 points (aproximation de la distance sur l'enveloppe)
+	// et recommence sur la section la plus proche jusqu'a ce quon trouve la section la plus proche
 
 	int depart_A = 0;
 	int depart_B = 0;
@@ -38,7 +38,7 @@ double Polygone::distance(const Polygone& poly2) const
 	int fin_B = poly2.points.taille();
 	int incrementA;
 	int incrementB;
-	int nbdiv = 10;
+	int nbdiv = 100;
 	do
 	{
 		int departA = depart_A;
@@ -54,20 +54,20 @@ double Polygone::distance(const Polygone& poly2) const
 		for (int i = departA; i < finA; i += incrementA) 
 		{
 			// creer les segments de l'enveloppe De A
-			int nextA = (i + incrementA) < points.taille() ? (i + incrementA) : 0;
+			int nextA = (i + incrementA) < finA ? (i + incrementA) : departA;
 			Segment segmentDeA(points[i], points[nextA]);
-			//cout << i << " -> " << nextA << endl;
+		//	cout << i << " -> " << nextA << endl;
 			// pour tout les nbdiv points de B
-			//cout << "B " << departB << " -> " << finB << endl;
+		//	cout << "B " << departB << " -> " << finB << endl;
 			for (int j = departB; j < finB; j += incrementB)
 			{
 				// creer les segments de l'enveloppe De B
-				int nextB = (j + incrementB) < poly2.points.taille() ? (j + incrementB) : 0;
+				int nextB = (j + incrementB) < finB ? (j + incrementB) : departB;
 				Segment segmentDeB(poly2.points[j], poly2.points[nextB]);
-				//cout << j << " -> " << nextB << endl;
-				//cout << "B " << departB << " -> " << finB << endl;
+		//		cout << j << " -> " << nextB << endl;
+		//		cout << "B " << departB << " -> " << finB << endl;
 				double distanceTmp = segmentDeA.distance(segmentDeB);
-				//cout << "distance = " << distanceTmp << endl;
+		//		cout << "distance = " << distanceTmp << endl;
 				if (distanceTmp < distance) {
 					distance = distanceTmp;
 					depart_A = i;
@@ -103,7 +103,7 @@ inline void Polygone::calculeAire() {
 }
 
 std::ostream& operator << (std::ostream& os, const Polygone& polygone){
-    // À compléter.
+    
 	char deuxpoints = ':';
 	os << polygone.nom << deuxpoints;
 
@@ -125,7 +125,7 @@ std::istream& operator >> (std::istream& in, Polygone& polygone){
 
     char c;
     do{
-		polygone.points.ajouter(Point()); // preparer l<espace pour le point dans le tableau
+		polygone.points.ajouter(Point()); // preparer l'espace pour le point dans le tableau
 		in >> polygone.points[polygone.points.taille()-1] >> c >> std::ws;
     }while(c==',');
     assert(c==';');
