@@ -89,6 +89,17 @@ inline bool Connect(const Tableau<Tableau<bool> > & matriceConnectivite, const i
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
 }
 
+/*
+inline bool Connect(const Tableau<Tableau<bool> > & matriceConnectivite, const int a, const int b)
+{
+	const Tableau<bool> * tableauA = &(matriceConnectivite[a]);
+	const Tableau<bool> * tableauB = &(matriceConnectivite[b]);
+	if (tableauA->operator[](b))
+		return true;
+	if (tableauB->operator[](a))
+		return true;
+	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
+}*/
 void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const int nb)
 {
 
@@ -117,21 +128,32 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	//Remplir la dite matrice avec les couples valides on rempli uniquement la moitie car (DM(A,B)) = (DM(B,A))
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
+		matriceConnectivite.ajouter(Tableau<bool>());
 		for (int j = i + 1; j < Carte.taille(); ++j)
 		{
 			if ((DM >= Carte[i]->distance(*Carte[j])))
 			{
-				while (matriceConnectivite.taille() <= i)
-				{
-					matriceConnectivite.ajouter(Tableau<bool>());
-				}
 				//remplissage des cases vides ou non calcule
 				while (matriceConnectivite[i].taille() < j)
 				{
 					matriceConnectivite[i].ajouter(false);
 				}
 				matriceConnectivite[i].ajouter(true);
+				std::cout << Carte[i]->getNom() << " " << Carte[j]->getNom()<< std::endl;
 			}
+			else
+			{
+				while (matriceConnectivite[i].taille() < j)
+				{
+					matriceConnectivite[i].ajouter(false);
+				}
+				matriceConnectivite[i].ajouter(false);
+			}
+
+		}
+		while (matriceConnectivite[i].taille() < Carte.taille())
+		{
+			matriceConnectivite[i].ajouter(false);
 		}
 	}
 
@@ -164,7 +186,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 
 
 	//on parcoure tout les poligones qui peuvent etre ajouter a l'empire 
-	for (int p = Poly.taille()-1; p < nb; ++p)
+	for (int p = Poly.taille(); p < nb; ++p)
 	{
 		PolyA = -1;
 		aire = 0;
