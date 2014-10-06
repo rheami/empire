@@ -27,13 +27,10 @@ class Polygone {
 	~Polygone();
 
 	const inline std::string getNom()const { return nom; };
-    // calcule  l<aire a la creation
-
-
 
   private:
-    // Représentation : à compléter.
-    int sommets; // nombre de sommets (ou de cotes)
+    
+    int sommets; // nombre de sommets
     Tableau<Point> points;
     double aire_;
 

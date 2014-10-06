@@ -53,7 +53,7 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 
 
 
-	//calcul de l'aire des couples de polygones si leur aire combine est superieur a celle du polygone ou couple de polygones actuel on verifie la distance
+	//cherche le couples de polygones ayant la plus grande aire et qui respecte la distance
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		for (int j = i+1; j < Carte.taille(); ++j)
@@ -82,7 +82,7 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 
 }
 
-
+// verifie si deux polygones sont relies (selon la matrice)
 inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, const int a , const int b)
 {
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
@@ -108,7 +108,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	double aire = 0;
 
 
-	//calcule l'aire des polygones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
+	//cherche l'aire du polygone le plus grand
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		if (aire < Carte[i]->aire())
@@ -120,11 +120,8 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 
 
 	//On battit une matrices de boolean representant les couples de polygones dont la distance est inferieur a DM 
-
 	Tableau<Tableau<bool> > matriceConnectivite;
 
-
-	//Remplir la dite matrice avec les couples valides on rempli uniquement la moitie car (DM(A,B)) = (DM(B,A))
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		matriceConnectivite.ajouter(Tableau<bool>());
@@ -143,7 +140,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	}
 
 
-	//on verifie les paires de taille interessante
+	//cherche le couples de polygones ayant la plus grande aire et qui respecte la distance
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		for (int j = i + 1; j < Carte.taille(); ++j)

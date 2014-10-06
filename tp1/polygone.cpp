@@ -50,13 +50,12 @@ double Polygone::distance(const Polygone& poly2) const
 		incrementB = max(( abs(finB - departB) / nbdiv), 1);
 
 		// pour les nbdiv points de A
-		//cout << "A " << departA << " -> " << finA << endl;
 		for (int i = departA; i < finA; i += incrementA) 
 		{
 			// creer les segments de l'enveloppe De A
 			int nextA = (i + incrementA) < finA ? (i + incrementA) : departA;
 			Segment segmentDeA(points[i], points[nextA]);
-		//	cout << i << " -> " << nextA << endl;
+		  //	cout << i << " -> " << nextA << endl;
 			// pour tout les nbdiv points de B
 		//	cout << "B " << departB << " -> " << finB << endl;
 			for (int j = departB; j < finB; j += incrementB)
