@@ -83,6 +83,28 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 }
 
 // verifie si deux polygones sont relies (selon la matrice)
+void IncrementerTableau(Tableau<int>& GroupeNPoly,int pos, int taille)
+{
+	if (pos == 0 && GroupeNPoly[pos] == taille)
+		++GroupeNPoly[pos];
+	else if (GroupeNPoly[pos] == taille-pos)
+	{
+		IncrementerTableau(GroupeNPoly, pos - 1, taille);
+			GroupeNPoly[pos] = (GroupeNPoly[pos - 1]+1);
+
+		
+	}
+	else
+		++GroupeNPoly[pos];
+}
+
+void TesterGroupeSuivant(Tableau<int>& GroupeNPoly, int taille)
+{
+	IncrementerTableau(GroupeNPoly, GroupeNPoly.taille() - 1, taille);
+	std::cout << "taille" << taille<<std::endl;
+
+}
+
 inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, const int a , const int b)
 {
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
@@ -167,7 +189,54 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 
 
 	//on parcoure tout les polygones qui peuvent etre ajouter a l'empire 
-	for (int p = Poly.taille(); p < nb; ++p)
+
+	
+	Tableau<int> GroupeNPoly;
+	for (int i = 0; i <nb; i++)
+	{
+	
+		GroupeNPoly.ajouter(i);
+	}
+
+	for (; GroupeNPoly[0] < Carte.taille(); TesterGroupeSuivant(GroupeNPoly,Carte.taille()-1))
+	{
+
+
+		int laire = 0;
+		for (int i = 0; i < GroupeNPoly.taille(); ++i)
+		{
+			std::cout << i; 
+			std::cout << " ";
+			std::cout << GroupeNPoly[i];
+			std::cout << " ";
+			std::cout << Carte[GroupeNPoly[i]]->aire();
+			std::cout << std::endl;
+			laire += Carte[GroupeNPoly[i]]->aire();
+		}
+		if (laire > aire)
+		{
+			bool Connected = true;
+			for (int i = 1; i < GroupeNPoly.taille() && Connected == true; ++i)
+			{
+				Connected = false;
+				for (int j = 0; j < i; ++j)
+				{
+					if (isConnected(matriceConnectivite, i, GroupeNPoly[j]))
+					{
+						Connected = true;
+					}
+				}
+			}
+			if (Connected == true)
+			{
+				Poly = GroupeNPoly;
+				aire = laire;
+			}
+		}
+	}
+
+	/*
+	for (;GroupeNPoly[0]<Carte.taille(); ++p)
 	{
 		PolyA = -1;
 		aire = 0;
@@ -185,7 +254,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 		if (PolyA != -1)
 		Poly.ajouter(PolyA);
 	}
-
+	*/
 	//on remet l'aire a 0 et on s'en resert pour calculer l'aire totale de l'assemblage trouve
 	aire = 0;
 
