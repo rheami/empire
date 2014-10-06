@@ -41,14 +41,13 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 	double aire = 0;
 
 
-	//calcule l'aire des poligones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
+	//cherche l'aire du polygone le plus grand
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		if (aire < Carte[i]->aire())
 		{
 			aire = Carte[i]->aire();
 			PolyA = Carte[i];
-			PolyB = NULL;
 		}
 	}
 
@@ -84,13 +83,13 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 }
 
 
-inline bool Connect(const Tableau<Tableau<bool> > & matriceConnectivite, const int a , const int b)
+inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, const int a , const int b)
 {
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
 }
 
 /*
-inline bool Connect(const Tableau<Tableau<bool> > & matriceConnectivite, const int a, const int b)
+inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, const int a, const int b)
 {
 	const Tableau<bool> * tableauA = &(matriceConnectivite[a]);
 	const Tableau<bool> * tableauB = &(matriceConnectivite[b]);
@@ -109,7 +108,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	double aire = 0;
 
 
-	//calcule l'aire des poligones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
+	//calcule l'aire des polygones individuels ce qui nous permet d'eviter d'evaluer la distance pour tout groupe de polygones de aillant une aire inferieur a celle du polygone le plus grand
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		if (aire < Carte[i]->aire())
@@ -129,34 +128,19 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	for (int i = 0; i < Carte.taille(); ++i)
 	{
 		matriceConnectivite.ajouter(Tableau<bool>());
-		for (int j = i + 1; j < Carte.taille(); ++j)
+		for (int j = 0; j < Carte.taille(); ++j)
 		{
-			if ((DM >= Carte[i]->distance(*Carte[j])))
+			if ((j>=i+1) && (DM >= Carte[i]->distance(*Carte[j])))
 			{
-				//remplissage des cases vides ou non calcule
-				while (matriceConnectivite[i].taille() < j)
-				{
-					matriceConnectivite[i].ajouter(false);
-				}
 				matriceConnectivite[i].ajouter(true);
-				std::cout << Carte[i]->getNom() << " " << Carte[j]->getNom()<< std::endl;
 			}
 			else
 			{
-				while (matriceConnectivite[i].taille() < j)
-				{
-					matriceConnectivite[i].ajouter(false);
-				}
 				matriceConnectivite[i].ajouter(false);
 			}
 
 		}
-		while (matriceConnectivite[i].taille() < Carte.taille())
-		{
-			matriceConnectivite[i].ajouter(false);
-		}
 	}
-
 
 
 	//on verifie les paires de taille interessante
@@ -165,7 +149,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 		for (int j = i + 1; j < Carte.taille(); ++j)
 		{
 			if (((Carte[i]->aire() + Carte[j]->aire())>aire)
-				&& (Connect(matriceConnectivite, i, j)))
+				&& (isConnected(matriceConnectivite, i, j)))
 			{
 				PolyA = i;
 				PolyB = j;
@@ -185,7 +169,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	Poly.ajouter(PolyB);
 
 
-	//on parcoure tout les poligones qui peuvent etre ajouter a l'empire 
+	//on parcoure tout les polygones qui peuvent etre ajouter a l'empire 
 	for (int p = Poly.taille(); p < nb; ++p)
 	{
 		PolyA = -1;
@@ -194,7 +178,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 		{
 			for (int j = i + 1; j < Carte.taille(); ++j)
 			{
-				if ((aire < Carte[j]->aire()) && (!Poly.contient(j)) && (Connect(matriceConnectivite, Poly[i], j)))
+				if ((aire < Carte[j]->aire()) && (!Poly.contient(j)) && (isConnected(matriceConnectivite, Poly[i], j)))
 				{
 					aire = Carte[j]->aire();
 					PolyA = j;
