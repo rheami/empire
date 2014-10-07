@@ -24,7 +24,7 @@ void MethodeUnPolygone(const Tableau<Polygone*> &Carte)
 	{
 		if (aire < Carte[i]->aire())
 		{
-			aire = Carte[i]->aire();
+			aire = (int) Carte[i]->aire();
 			Plusgrand = Carte[i];
 		}
 	}
@@ -220,7 +220,7 @@ void MethodeTroisPlusPolygone(const Tableau<Polygone*> &Carte, const double DM, 
 				//std::cout << " ";
 				//	std::cout << Carte[GroupeNPoly[i]]->aire();
 				//std::cout << std::endl;
-				laire += Carte[GroupeNPoly[i]]->aire();
+				laire += (int) Carte[GroupeNPoly[i]]->aire();
 			}
 
 			//si l'aire du polygone local est inferieur a la meuilleur a ce jours on n'effectu pas les tests suivants

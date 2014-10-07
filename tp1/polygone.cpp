@@ -46,8 +46,8 @@ double Polygone::distance(const Polygone& poly2) const
 		int departB = depart_B;
 		int finB = fin_B;
 
-		incrementA = max(( abs(finA - departA) / nbdiv), 1); 
-		incrementB = max(( abs(finB - departB) / nbdiv), 1);
+		incrementA = (int) max(( abs(finA - departA) / nbdiv), 1); 
+		incrementB = (int) max(( abs(finB - departB) / nbdiv), 1);
 
 		// pour les nbdiv points de A
 		for (int i = departA; i < finA; i += incrementA) 
