@@ -87,10 +87,10 @@ void IncrementerTableau(Tableau<int>& GroupeNPoly,int pos, int taille)
 {
 	if (pos == 0 && GroupeNPoly[pos] == taille)
 		++GroupeNPoly[pos];
-	else if (GroupeNPoly[pos] == taille-pos)
+	else if (GroupeNPoly[pos] == taille)
 	{
 		IncrementerTableau(GroupeNPoly, pos - 1, taille);
-			GroupeNPoly[pos] = (GroupeNPoly[pos - 1]+1);
+			GroupeNPoly[pos] = min(GroupeNPoly[pos - 1]+1,taille);
 
 		
 	}
@@ -101,7 +101,7 @@ void IncrementerTableau(Tableau<int>& GroupeNPoly,int pos, int taille)
 void TesterGroupeSuivant(Tableau<int>& GroupeNPoly, int taille)
 {
 	IncrementerTableau(GroupeNPoly, GroupeNPoly.taille() - 1, taille);
-	std::cout << "taille" << taille<<std::endl;
+	//std::cout << "taille" << taille<<std::endl;
 
 }
 
@@ -198,7 +198,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 		GroupeNPoly.ajouter(i);
 	}
 
-	for (; GroupeNPoly[0] < Carte.taille(); TesterGroupeSuivant(GroupeNPoly,Carte.taille()-1))
+	for (; (GroupeNPoly[0] + GroupeNPoly.taille()-1) < Carte.taille(); TesterGroupeSuivant(GroupeNPoly, Carte.taille() - 1))
 	{
 
 
@@ -260,7 +260,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 
 	for (int i = 0; i < Poly.taille(); ++i)
 	{
-		aire += Carte[i]->aire();
+		aire += Carte[Poly[i]]->aire();
 	}
 
 	//affichage de l'aire arondi
