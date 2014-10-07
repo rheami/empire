@@ -121,7 +121,7 @@ inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, con
 		return true;
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
 }*/
-void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM, const int nb)
+void MethodeTroisPlusPolygone(const Tableau<Polygone*> &Carte, const double DM, const int nb)
 {
 
 
@@ -188,24 +188,29 @@ void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM
 		Poly.ajouter(PolyB);
 
 
-	//on parcoure tout les polygones qui peuvent etre ajouter a l'empire 
 
 
+	//Ce tableau peut etre interprete a la fois comme la liste des polygones du groupe et comme la liste des indices de plusieurs boucles encastre et en les logeant dans un tableau le nombre de boucles encastre peut varrier a volonte 
 	Tableau<int> GroupeNPoly;
 
+	//Limiter le nombre de polygone au nombre maximal dans la carte
 	int QuantitePolygoneCible = min(nb, (Carte.taille()));
+	
+	// on initialise les polygones a 0,1,2....n de cette facon on saute la moitie des test redondants
 	for (int i = 0; i <QuantitePolygoneCible; i++)
 	{
 
 		GroupeNPoly.ajouter(i);
 	}
+
+
 	do
 	{
-
+		// la methode TesterGroupeSuivant incremente les indices des boucles encastre tour a tours de facon recurcive
 		for (; (GroupeNPoly[GroupeNPoly.taille() - 1]) < Carte.taille(); TesterGroupeSuivant(GroupeNPoly, Carte.taille() - 1))
 		{
 
-
+			//aire locale les groupes plus complex ont besoin d'une variable locale pour accumuler la somme de leur aire
 			int laire = 0;
 			for (int i = 0; i < GroupeNPoly.taille(); ++i)
 			{
@@ -217,20 +222,26 @@ void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM
 				//std::cout << std::endl;
 				laire += Carte[GroupeNPoly[i]]->aire();
 			}
+
+			//si l'aire du polygone local est inferieur a la meuilleur a ce jours on n'effectu pas les tests suivants
 			if (laire > aire)
 			{
+				//on veifie que tout les polygones peuvent etre relier a au moins un des polygones precedents 
 				bool Connected = true;
 				for (int i = 1; i < GroupeNPoly.taille() && Connected == true; ++i)
 				{
 					Connected = false;
+					//si un des polygones echoue le test de connectivite on saute au groupe suivant
 					for (int j = 0; j < i; ++j)
 					{
 						if (isConnected(matriceConnectivite, i, GroupeNPoly[j]))
 						{
 							Connected = true;
+							break;
 						}
 					}
 				}
+				// si le polygone succede au tete de connectivite le meuilleur resultat est remplace par le resultat actuel
 				if (Connected == true)
 				{
 					Poly = GroupeNPoly;
@@ -238,6 +249,7 @@ void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM
 				}
 			}
 		}
+		//si aucun groupe de QuantitePolygoneCible de polygone n'as ete trouve on diminue de 1 et on recommence
 		if (GroupeNPoly.taille() != Poly.taille())
 		{
 			--QuantitePolygoneCible;
@@ -249,27 +261,8 @@ void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM
 			}
 			GroupeNPoly.enlever_dernier();
 		}
-	} while (GroupeNPoly.taille() != Poly.taille() && QuantitePolygoneCible>3);
-	/*
-	for (;GroupeNPoly[0]<Carte.taille(); ++p)
-	{
-		PolyA = -1;
-		aire = 0;
-		for (int i = 0; i < Poly.taille(); ++i)
-		{
-			for (int j = i + 1; j < Carte.taille(); ++j)
-			{
-				if ((aire < Carte[j]->aire()) && (!Poly.contient(j)) && (isConnected(matriceConnectivite, Poly[i], j)))
-				{
-					aire = Carte[j]->aire();
-					PolyA = j;
-				}
-			}
-		}
-		if (PolyA != -1)
-		Poly.ajouter(PolyA);
-	}
-	*/
+	} while (GroupeNPoly.taille() != Poly.taille() && QuantitePolygoneCible>2);
+	
 	//on remet l'aire a 0 et on s'en resert pour calculer l'aire totale de l'assemblage trouve
 	aire = 0;
 
@@ -327,7 +320,7 @@ int main(int argc, const char** argv){
             break;
         }
         default:
-			MethodePlusDeTroisPolygone(Carte, DM, nbRegions);
+			MethodeTroisPlusPolygone(Carte, DM, nbRegions);
             break;
     }
 
