@@ -85,9 +85,9 @@ void MethodeDeuxPolygone(const Tableau<Polygone*> &Carte,const double DM)
 // verifie si deux polygones sont relies (selon la matrice)
 void IncrementerTableau(Tableau<int>& GroupeNPoly,int pos, int taille)
 {
-	if (pos == 0 && GroupeNPoly[pos] == taille)
+	if (pos == 0 && GroupeNPoly[pos] == taille - (GroupeNPoly.taille() - pos))
 		++GroupeNPoly[pos];
-	else if (GroupeNPoly[pos] == taille)
+	else if (GroupeNPoly[pos] == taille-(GroupeNPoly.taille()-pos))
 	{
 		IncrementerTableau(GroupeNPoly, pos - 1, taille);
 			GroupeNPoly[pos] = min(GroupeNPoly[pos - 1]+1,taille);
@@ -121,7 +121,7 @@ inline bool isConnected(const Tableau<Tableau<bool> > & matriceConnectivite, con
 		return true;
 	return (matriceConnectivite[a][b] || matriceConnectivite[b][a]);
 }*/
-void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const int nb)
+void MethodePlusDeTroisPolygone(const Tableau<Polygone*> &Carte, const double DM, const int nb)
 {
 
 
@@ -149,7 +149,7 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 		matriceConnectivite.ajouter(Tableau<bool>());
 		for (int j = 0; j < Carte.taille(); ++j)
 		{
-			if ((j>=i+1) && (DM >= Carte[i]->distance(*Carte[j])))
+			if ((j >= i + 1) && (DM >= Carte[i]->distance(*Carte[j])))
 			{
 				matriceConnectivite[i].ajouter(true);
 			}
@@ -184,57 +184,72 @@ void MethodeTroisPolygone(const Tableau<Polygone*> &Carte,const double DM,const 
 	Poly.ajouter(PolyA);
 
 	//ajouter le second polygone du couple si un couple as ete trouve
-	if (PolyB !=-1)
-	Poly.ajouter(PolyB);
+	if (PolyB != -1)
+		Poly.ajouter(PolyB);
 
 
 	//on parcoure tout les polygones qui peuvent etre ajouter a l'empire 
 
-	
+
 	Tableau<int> GroupeNPoly;
-	for (int i = 0; i <nb; i++)
+
+	int QuantitePolygoneCible = min(nb, (Carte.taille()));
+	for (int i = 0; i <QuantitePolygoneCible; i++)
 	{
-	
+
 		GroupeNPoly.ajouter(i);
 	}
-
-	for (; (GroupeNPoly[0] + GroupeNPoly.taille()-1) < Carte.taille(); TesterGroupeSuivant(GroupeNPoly, Carte.taille() - 1))
+	do
 	{
 
+		for (; (GroupeNPoly[GroupeNPoly.taille() - 1]) < Carte.taille(); TesterGroupeSuivant(GroupeNPoly, Carte.taille() - 1))
+		{
 
-		int laire = 0;
-		for (int i = 0; i < GroupeNPoly.taille(); ++i)
-		{
-			std::cout << i; 
-			std::cout << " ";
-			std::cout << GroupeNPoly[i];
-			std::cout << " ";
-			std::cout << Carte[GroupeNPoly[i]]->aire();
-			std::cout << std::endl;
-			laire += Carte[GroupeNPoly[i]]->aire();
-		}
-		if (laire > aire)
-		{
-			bool Connected = true;
-			for (int i = 1; i < GroupeNPoly.taille() && Connected == true; ++i)
+
+			int laire = 0;
+			for (int i = 0; i < GroupeNPoly.taille(); ++i)
 			{
-				Connected = false;
-				for (int j = 0; j < i; ++j)
+				//	std::cout << i; 
+				//std::cout << " ";
+				//	std::cout << GroupeNPoly[i];
+				//std::cout << " ";
+				//	std::cout << Carte[GroupeNPoly[i]]->aire();
+				//std::cout << std::endl;
+				laire += Carte[GroupeNPoly[i]]->aire();
+			}
+			if (laire > aire)
+			{
+				bool Connected = true;
+				for (int i = 1; i < GroupeNPoly.taille() && Connected == true; ++i)
 				{
-					if (isConnected(matriceConnectivite, i, GroupeNPoly[j]))
+					Connected = false;
+					for (int j = 0; j < i; ++j)
 					{
-						Connected = true;
+						if (isConnected(matriceConnectivite, i, GroupeNPoly[j]))
+						{
+							Connected = true;
+						}
 					}
 				}
-			}
-			if (Connected == true)
-			{
-				Poly = GroupeNPoly;
-				aire = laire;
+				if (Connected == true)
+				{
+					Poly = GroupeNPoly;
+					aire = laire;
+				}
 			}
 		}
-	}
+		if (GroupeNPoly.taille() != Poly.taille())
+		{
+			--QuantitePolygoneCible;
+			for (int i = 0; i < QuantitePolygoneCible; i++)
+			{
 
+				GroupeNPoly[i] = i;
+
+			}
+			GroupeNPoly.enlever_dernier();
+		}
+	} while (GroupeNPoly.taille() != Poly.taille() && QuantitePolygoneCible>3);
 	/*
 	for (;GroupeNPoly[0]<Carte.taille(); ++p)
 	{
@@ -312,7 +327,7 @@ int main(int argc, const char** argv){
             break;
         }
         default:
-			MethodeTroisPolygone(Carte, DM, nbRegions);
+			MethodePlusDeTroisPolygone(Carte, DM, nbRegions);
             break;
     }
 
